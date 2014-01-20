@@ -29,7 +29,7 @@ class AdvancedFileView extends View
 
   initialize: (serializeState) ->
     atom.commands.add 'atom-workspace', 'advanced-new-file:toggle', => @toggle()
-    @miniEditor.setPlaceholderText(path.join('path','to','file.txt'));
+    @miniEditor.getModel().setPlaceholderText(path.join('path','to','file.txt'));
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
