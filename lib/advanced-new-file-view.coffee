@@ -154,7 +154,7 @@ class AdvancedFileView extends View
       if /\/$/.test(relativePath)
         mkdirp pathToCreate
       else
-        atom.open pathsToOpen: [pathToCreate]
+        atom.open pathsToOpen: [pathToCreate], newWindow: false
     catch error
       @setMessage 'alert', error.message
 
