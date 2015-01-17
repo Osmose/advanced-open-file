@@ -1,0 +1,17 @@
+{
+  "name": "advanced-new-file",
+  "main": "./lib/advanced-new-file-view",
+  "version": "0.8.1",
+  "description": "Create files and directories by typing a relative path.",
+  "activationEvents": [
+    "advanced-new-file:toggle"
+  ],
+  "repository": "https://github.com/Trudko/advanced-new-file",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "mkdirp": "^0.3.5"
+  }
+}

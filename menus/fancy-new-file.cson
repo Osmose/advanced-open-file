@@ -1,0 +1,14 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  '.overlayer':
+      'Enable advanced-new-file': 'advanced-new-file:toggle'
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Advanced New File'
+      'command': 'advanced-new-file:toggle'
+    ]
+  }
+]
