@@ -147,16 +147,17 @@ class AdvancedFileView extends View
           @span class: "icon #{icon}", file.name
 
   confirm: ->
-    relativePath = @miniEditor.getEditor().getText()
-    pathToCreate = path.join(@referenceDir(), relativePath)
+    relativePaths = @miniEditor.getEditor().getText().split(",")
 
-    try
-      if /\/$/.test(relativePath)
-        mkdirp pathToCreate
-      else
-        atom.open pathsToOpen: [pathToCreate], newWindow: false
-    catch error
-      @setMessage 'alert', error.message
+    for relativePath in relativePaths
+      pathToCreate = path.join(@referenceDir(), relativePath)
+      try
+        if /\/$/.test(pathToCreate)
+          mkdirp pathToCreate
+        else
+          atom.open pathsToOpen: [pathToCreate], newWindow: false
+      catch error
+        @setMessage 'alert', error.message
 
     @detach()
 
