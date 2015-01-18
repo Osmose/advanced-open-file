@@ -1,8 +1,8 @@
 {
   "name": "advanced-new-file",
   "main": "./lib/advanced-new-file-view",
-  "version": "0.8.1",
-  "description": "Create files and directories by typing a relative path.",
+  "version": "0.0.0",
+  "description": "Updated version of Fancy New File. Create multiple files and directories by typing a relative path.",
   "activationEvents": [
     "advanced-new-file:toggle"
   ],
