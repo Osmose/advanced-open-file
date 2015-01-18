@@ -10,6 +10,9 @@ If you have any ideas or even better pull requests, please let me know :)
 
 If you like the Atom maybe you will like my blog www.atomtips.com.
 
+## Example
+![advanced-new-file](https://cloud.githubusercontent.com/assets/3289225/5792505/81f41c72-9f1b-11e4-9085-38cfb832383c.gif)
+
 ## Settings:
 
 All settings can be turned on and off via the built-in settings tab (`cmd-,`) and selecting Advanced New File from the list of installed packages.
