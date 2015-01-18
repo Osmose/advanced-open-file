@@ -31,25 +31,6 @@ class AdvancedFileView extends View
     atom.workspaceView.command "advanced-new-file:toggle", => @toggle()
     @miniEditor.setPlaceholderText(path.join('path','to','file.txt'));
 
-    @on 'core:confirm', => @confirm()
-    @on 'core:cancel', => @detach()
-    @miniEditor.hiddenInput.on 'focusout', => @detach() unless @detaching
-
-    consumeKeypress = (ev) => ev.preventDefault(); ev.stopPropagation()
-
-    # Populate the directory listing live
-    @miniEditor.getEditor().getBuffer().on 'changed', (ev) => @update()
-
-    # Consume the keydown event from holding down the Tab key
-    @miniEditor.on 'keydown', (ev) => if ev.keyCode is 9 then consumeKeypress ev
-
-    # Handle the Tab completion
-    @miniEditor.on 'keyup', (ev) =>
-      if ev.keyCode is 9
-        consumeKeypress ev
-        pathToComplete = @getLastSearchedFile()
-        @autocomplete pathToComplete
-
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
     homeDir = process.env.HOME or process.env.HOMEPATH or process.env.USERPROFILE
@@ -192,6 +173,25 @@ class AdvancedFileView extends View
     @suggestPath()
     @previouslyFocusedElement = $(':focus')
     atom.workspaceView.append(this)
+
+    @on 'core:confirm', => @confirm()
+    @on 'core:cancel', => @detach()
+    @miniEditor.hiddenInput.on 'focusout', => @detach() unless @detaching
+
+    consumeKeypress = (ev) => ev.preventDefault(); ev.stopPropagation()
+
+    # Populate the directory listing live
+    @miniEditor.getEditor().getBuffer().on 'changed', (ev) => @update()
+
+    # Consume the keydown event from holding down the Tab key
+    @miniEditor.on 'keydown', (ev) => if ev.keyCode is 9 then consumeKeypress ev
+
+    # Handle the Tab completion
+    @miniEditor.on 'keyup', (ev) =>
+      if ev.keyCode is 9
+        consumeKeypress ev
+        pathToComplete = @getLastSearchedFile()
+        @autocomplete pathToComplete
     @miniEditor.focus()
     @getFileList (files) -> @renderAutocompleteList files
 
