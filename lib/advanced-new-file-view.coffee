@@ -5,7 +5,9 @@ mkdirp = require 'mkdirp'
 
 module.exports =
 class AdvancedFileView extends View
+  PATH_SEPARATOR: ","
   advancedFileView: null
+
   @configDefaults:
     suggestCurrentFilePath: false
     showFilesInAutoComplete: false
@@ -45,7 +47,8 @@ class AdvancedFileView extends View
     @miniEditor.on 'keyup', (ev) =>
       if ev.keyCode is 9
         consumeKeypress ev
-        @autocomplete @miniEditor.getEditor().getText()
+        pathToComplete = @getLastSearchedFile()
+        @autocomplete pathToComplete
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
@@ -54,16 +57,23 @@ class AdvancedFileView extends View
 
   # Resolves the path being inputted in the dialog, up to the last slash
   inputPath: () ->
-    input = @miniEditor.getEditor().getText()
+    input = @getLastSearchedFile()
     path.join @referenceDir(), input.substr(0, input.lastIndexOf(path.sep))
 
   inputFullPath: () ->
-    input = @miniEditor.getEditor().getText()
+    input = @getLastSearchedFile()
     path.join @referenceDir(), input
+
+  getLastSearchedFile: () ->
+    input = @miniEditor.getEditor().getText()
+    commanIndex = input.lastIndexOf(@PATH_SEPARATOR) + 1
+    input.substring(commanIndex, input.length)
+
 
   # Returns the list of directories matching the current input (path and autocomplete fragment)
   getFileList: (callback) ->
-    input = @miniEditor.getEditor().getText()
+
+    input = @getLastSearchedFile()
     fs.stat @inputPath(), (err, stat) =>
 
       if err?.code is 'ENOENT'
@@ -97,26 +107,30 @@ class AdvancedFileView extends View
   # Called only when pressing Tab to trigger auto-completion
   autocomplete: (str) ->
     @getFileList (files) ->
-      updatedPath = ""
+      newString = str
+      oldInputText = @miniEditor.getEditor().getText()
+      indexOfString = oldInputText.lastIndexOf(str)
+      textWithoutSuggestion = oldInputText.substring(0, indexOfString)
       if files?.length is 1
         newPath = path.join(@inputPath(), files[0].name)
+
         suffix = if files[0].isDir then '/' else ''
 
-        @updatePath(newPath + suffix)
+        @updatePath(newPath + suffix, textWithoutSuggestion)
 
       else if files?.length > 1
         longestPrefix = @longestCommonPrefix((file.name for file in files))
         newPath = path.join(@inputPath(), longestPrefix)
 
         if (newPath.length > @inputFullPath().length)
-          @updatePath(newPath)
+          @updatePath(newPath, textWithoutSuggestion)
         else
           atom.beep()
       else
         atom.beep()
 
-  updatePath: (newPath) ->
-    relativePath = atom.project.relativize(newPath)
+  updatePath: (newPath, oldPath) ->
+    relativePath = oldPath + atom.project.relativize(newPath)
     @miniEditor.getEditor().setText relativePath
 
 
@@ -147,7 +161,7 @@ class AdvancedFileView extends View
           @span class: "icon #{icon}", file.name
 
   confirm: ->
-    relativePaths = @miniEditor.getEditor().getText().split(",")
+    relativePaths = @miniEditor.getEditor().getText().split(@PATH_SEPARATOR)
 
     for relativePath in relativePaths
       pathToCreate = path.join(@referenceDir(), relativePath)
