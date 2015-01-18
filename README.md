@@ -12,7 +12,7 @@ If you like the Atom maybe you will like my blog www.atomtips.com.
 
 ## Settings:
 
-All settings can be turned on and off via the built-in settings tab (`cmd-,`) and selecting Fancy New File from the list of installed packages.
+All settings can be turned on and off via the built-in settings tab (`cmd-,`) and selecting Advanced New File from the list of installed packages.
 
 - Case Sensitive Auto Completion
 - Show Files In Auto Completion
