@@ -46,7 +46,7 @@ class AdvancedFileView extends View
     path.join @referenceDir(), input
 
   getLastSearchedFile: () ->
-    input = @miniEditor.getEditor().getText()
+    input = @miniEditor.getText()
     commanIndex = input.lastIndexOf(@PATH_SEPARATOR) + 1
     input.substring(commanIndex, input.length)
 
@@ -89,7 +89,7 @@ class AdvancedFileView extends View
   autocomplete: (str) ->
     @getFileList (files) ->
       newString = str
-      oldInputText = @miniEditor.getEditor().getText()
+      oldInputText = @miniEditor.getText()
       indexOfString = oldInputText.lastIndexOf(str)
       textWithoutSuggestion = oldInputText.substring(0, indexOfString)
       if files?.length is 1
@@ -112,14 +112,13 @@ class AdvancedFileView extends View
 
   updatePath: (newPath, oldPath) ->
     relativePath = oldPath + atom.project.relativize(newPath)
-    @miniEditor.getEditor().setText relativePath
-
+    @miniEditor.setText relativePath
 
   update: ->
     @getFileList (files) ->
       @renderAutocompleteList files
 
-    if /\/$/.test @miniEditor.getEditor().getText()
+    if /\/$/.test @miniEditor.getText()
       @setMessage 'file-directory-create'
     else
       @setMessage 'file-add'
@@ -142,7 +141,7 @@ class AdvancedFileView extends View
           @span class: "icon #{icon}", file.name
 
   confirm: ->
-    relativePaths = @miniEditor.getEditor().getText().split(@PATH_SEPARATOR)
+    relativePaths = @miniEditor.getText().split(@PATH_SEPARATOR)
 
     for relativePath in relativePaths
       pathToCreate = path.join(@referenceDir(), relativePath)
@@ -159,7 +158,7 @@ class AdvancedFileView extends View
   detach: ->
     return unless @hasParent()
     @detaching = true
-    @miniEditor.getEditor().setText ''
+    @miniEditor.setText ''
     @setMessage()
     @directoryList.empty()
     miniEditorFocused = @miniEditor.isFocused
@@ -176,12 +175,12 @@ class AdvancedFileView extends View
 
     @on 'core:confirm', => @confirm()
     @on 'core:cancel', => @detach()
-    @miniEditor.hiddenInput.on 'focusout', => @detach() unless @detaching
+    @miniEditor.on 'focusout', => @detach() unless @detaching
 
     consumeKeypress = (ev) => ev.preventDefault(); ev.stopPropagation()
 
     # Populate the directory listing live
-    @miniEditor.getEditor().getBuffer().on 'changed', (ev) => @update()
+    @miniEditor.getModel().onDidChange => @update()
 
     # Consume the keydown event from holding down the Tab key
     @miniEditor.on 'keydown', (ev) => if ev.keyCode is 9 then consumeKeypress ev
@@ -201,7 +200,7 @@ class AdvancedFileView extends View
       if activePath
         activeDir = path.dirname(activePath) + '/'
         suggestedPath = path.relative @referenceDir(), activeDir
-        @miniEditor.getEditor().setText suggestedPath + '/'
+        @miniEditor.setText suggestedPath + '/'
 
   toggle: ->
     if @hasParent()
