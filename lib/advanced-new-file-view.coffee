@@ -22,14 +22,13 @@ class AdvancedFileView extends View
   @content: (params)->
     @div class: 'advanced-new-file overlay from-top', =>
       @p outlet:'message', class:'icon icon-file-add', "Enter the path for the new file/directory. Directories end with a '" + path.sep + "'."
-      @subview 'miniEditor', new EditorView({mini:true})
+      @subview 'miniEditor', new EditorView({mini:true, placeholderText: path.join('path','to','file.txt')})
       @ul class: 'list-group', outlet: 'directoryList'
 
   @detaching: false,
 
   initialize: (serializeState) ->
     atom.workspaceView.command "advanced-new-file:toggle", => @toggle()
-    @miniEditor.setPlaceholderText(path.join('path','to','file.txt'));
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
