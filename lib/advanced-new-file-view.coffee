@@ -192,6 +192,10 @@ class AdvancedFileView extends View
         consumeKeypress ev
         pathToComplete = @getLastSearchedFile()
         @autocomplete pathToComplete
+      else if ev.keyCode is 8
+        editorText = @miniEditor.getText()
+        lastIndexOfSeparator = editorText.lastIndexOf(path.sep) + 1
+        @miniEditor.setText(editorText.slice(0, lastIndexOfSeparator))        
     @miniEditor.focus()
     @getFileList (files) -> @renderAutocompleteList files
 
