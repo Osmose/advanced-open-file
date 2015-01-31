@@ -7,7 +7,7 @@ module.exports =
 class AdvancedFileView extends View
   PATH_SEPARATOR: ","
   advancedFileView: null
-  keyUp: null
+  keyUpListener: null
 
   @configDefaults:
     suggestCurrentFilePath: false
@@ -31,6 +31,8 @@ class AdvancedFileView extends View
   initialize: (serializeState) ->
     atom.commands.add 'atom-workspace', 'advanced-new-file:toggle', => @toggle()
     @miniEditor.getModel().setPlaceholderText(path.join('path','to','file.txt'));
+    @on 'core:confirm', => @confirm()
+    @on 'core:cancel', => @detach()
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
@@ -54,7 +56,6 @@ class AdvancedFileView extends View
 
   # Returns the list of directories matching the current input (path and autocomplete fragment)
   getFileList: (callback) ->
-
     input = @getLastSearchedFile()
     fs.stat @inputPath(), (err, stat) =>
 
@@ -62,7 +63,6 @@ class AdvancedFileView extends View
         return []
 
       fs.readdir @inputPath(), (err, files) =>
-
         fileList = []
         dirList = []
 
@@ -75,16 +75,21 @@ class AdvancedFileView extends View
 
           matches =
             caseSensitive and filename.indexOf(fragment) is 0 or
-            not caseSensitive and filename.toLowerCase().indexOf(fragment) is 0
+            not caseSensitive and@miniEditor.on 'keydown', (ev) => filename.toLowerCase().indexOf(fragment) is 0
 
           if matches
-            isDir = fs.statSync(path.join(@inputPath(), filename)).isDirectory()
+            try
+              isDir = fs.statSync(path.join(@inputPath(), filename)).isDirectory()
+            catch
+              ## TODO fix error which is thrown when you hold backspace
+
             (if isDir then dirList else fileList).push name:filename, isDir:isDir
 
         if atom.config.get 'advanced-new-file.showFilesInAutoComplete'
           callback.apply @, [dirList.concat fileList]
         else
           callback.apply @, [dirList]
+
 
   # Called only when pressing Tab to trigger auto-completion
   autocomplete: (str) ->
@@ -97,8 +102,7 @@ class AdvancedFileView extends View
         newPath = path.join(@inputPath(), files[0].name)
 
         suffix = if files[0].isDir then '/' else ''
-
-        @updatePath(newPath + suffix, textWithoutSuggestion)
+        @miniEditor.on 'keydown', (ev) =>fix, textWithoutSuggestion)
 
       else if files?.length > 1
         longestPrefix = @longestCommonPrefix((file.name for file in files))
@@ -163,7 +167,7 @@ class AdvancedFileView extends View
     @setMessage()
     @directoryList.empty()
     miniEditorFocused = @miniEditor.isFocused
-    @keyUp.off()
+    @keyUpListener.off()
     super
 
     @restoreFocus() if miniEditorFocused
@@ -174,8 +178,7 @@ class AdvancedFileView extends View
     @previouslyFocusedElement = $(':focus')
     atom.workspaceView.append(this)
 
-    @on 'core:confirm', => @confirm()
-    @on 'core:cancel', => @detach()
+
     @miniEditor.on 'focusout', => @detach() unless @detaching
 
     consumeKeypress = (ev) => ev.preventDefault(); ev.stopPropagation()
@@ -186,8 +189,8 @@ class AdvancedFileView extends View
     # Consume the keydown event from holding down the Tab key
     @miniEditor.on 'keydown', (ev) => if ev.keyCode is 9 then consumeKeypress ev
 
-    # Handle the Tab completion    
-    @keyUp = @miniEditor.on 'keyup', (ev) =>
+    # Handle the Tab completion
+    @keyUpListener = @miniEditor.on 'keyup', (ev) =>
       if ev.keyCode is 9
         consumeKeypress ev
         pathToComplete = @getLastSearchedFile()
@@ -195,7 +198,7 @@ class AdvancedFileView extends View
       else if ev.keyCode is 8
         editorText = @miniEditor.getText()
         lastIndexOfSeparator = editorText.lastIndexOf(path.sep) + 1
-        @miniEditor.setText(editorText.slice(0, lastIndexOfSeparator))        
+        @miniEditor.setText(editorText.slice(0, lastIndexOfSeparator))
     @miniEditor.focus()
     @getFileList (files) -> @renderAutocompleteList files
 
