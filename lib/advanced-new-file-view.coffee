@@ -7,6 +7,7 @@ module.exports =
 class AdvancedFileView extends View
   PATH_SEPARATOR: ","
   advancedFileView: null
+  keyUp: null
 
   @configDefaults:
     suggestCurrentFilePath: false
@@ -162,7 +163,7 @@ class AdvancedFileView extends View
     @setMessage()
     @directoryList.empty()
     miniEditorFocused = @miniEditor.isFocused
-
+    @keyUp.off()
     super
 
     @restoreFocus() if miniEditorFocused
@@ -185,8 +186,8 @@ class AdvancedFileView extends View
     # Consume the keydown event from holding down the Tab key
     @miniEditor.on 'keydown', (ev) => if ev.keyCode is 9 then consumeKeypress ev
 
-    # Handle the Tab completion
-    @miniEditor.on 'keyup', (ev) =>
+    # Handle the Tab completion    
+    @keyUp = @miniEditor.on 'keyup', (ev) =>
       if ev.keyCode is 9
         consumeKeypress ev
         pathToComplete = @getLastSearchedFile()
