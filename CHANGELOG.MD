@@ -1,3 +1,9 @@
+0.3.0 (Feb 1 2015)
+===================
+
+* Added Remove Whole folder setting
+* Resolved few issues brought by last release
+
 0.2.0 (Jan 31 2015)
 ===================
 
