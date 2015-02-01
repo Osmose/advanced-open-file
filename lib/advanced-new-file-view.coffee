@@ -102,7 +102,7 @@ class AdvancedFileView extends View
         newPath = path.join(@inputPath(), files[0].name)
 
         suffix = if files[0].isDir then '/' else ''
-        @miniEditor.on 'keydown', (ev) =>fix, textWithoutSuggestion)
+        @updatePath(newPath + suffix, textWithoutSuggestion)
 
       else if files?.length > 1
         longestPrefix = @longestCommonPrefix((file.name for file in files))
