@@ -10,6 +10,7 @@ class AdvancedFileView extends View
   keyUpListener: null
 
   @configDefaults:
+    removeWholeFolder: true
     suggestCurrentFilePath: false
     showFilesInAutoComplete: false
     caseSensitiveAutoCompletion: false
@@ -75,7 +76,7 @@ class AdvancedFileView extends View
 
           matches =
             caseSensitive and filename.indexOf(fragment) is 0 or
-            not caseSensitive and@miniEditor.on 'keydown', (ev) => filename.toLowerCase().indexOf(fragment) is 0
+            not caseSensitive and filename.toLowerCase().indexOf(fragment) is 0
 
           if matches
             try
@@ -196,9 +197,15 @@ class AdvancedFileView extends View
         pathToComplete = @getLastSearchedFile()
         @autocomplete pathToComplete
       else if ev.keyCode is 8
-        editorText = @miniEditor.getText()
-        lastIndexOfSeparator = editorText.lastIndexOf(path.sep) + 1
-        @miniEditor.setText(editorText.slice(0, lastIndexOfSeparator))
+        if  atom.config.get 'advanced-new-file.removeWholeFolder'
+          absolutePathToFile = @inputFullPath()
+          if fs.existsSync(absolutePathToFile) and fs.statSync(absolutePathToFile)
+            editorText = @miniEditor.getText()
+            pathSepIndex = editorText.lastIndexOf(path.sep) + 1
+            fileSep = editorText.lastIndexOf(@PATH_SEPARATOR)
+            substr = Math.max(pathSepIndex, fileSep)
+            @miniEditor.setText(editorText.substring(0, substr))
+
     @miniEditor.focus()
     @getFileList (files) -> @renderAutocompleteList files
 
@@ -209,6 +216,7 @@ class AdvancedFileView extends View
         activeDir = path.dirname(activePath) + '/'
         suggestedPath = path.relative @referenceDir(), activeDir
         @miniEditor.setText suggestedPath + '/'
+
 
   toggle: ->
     if @hasParent()

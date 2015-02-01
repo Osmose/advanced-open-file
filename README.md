@@ -20,3 +20,4 @@ All settings can be turned on and off via the built-in settings tab (`cmd-,`) an
 - Case Sensitive Auto Completion
 - Show Files In Auto Completion
 - Suggest Current File Path
+- Remove whole folder
