@@ -1,4 +1,10 @@
-0.3.0 (Feb 1 2015)
+0.2.2 (Feb 7 2015)
+===================
+
+* Opens new window with new file  #5
+* Can't install v0.2.0  #4
+
+0.2.1 (Feb 1 2015)
 ===================
 
 * Added Remove Whole folder setting
