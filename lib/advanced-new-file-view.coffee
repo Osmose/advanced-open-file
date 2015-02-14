@@ -181,6 +181,7 @@ class AdvancedFileView extends View
     @panel = atom.workspace.addModalPanel(item: this)
 
     @miniEditor.on 'focusout', => @detach() unless @detaching
+    @miniEditor.focus()
 
     consumeKeypress = (ev) => ev.preventDefault(); ev.stopPropagation()
 
