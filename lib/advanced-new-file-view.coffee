@@ -38,7 +38,7 @@ class AdvancedFileView extends View
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
     homeDir = process.env.HOME or process.env.HOMEPATH or process.env.USERPROFILE
-    atom.project.getPath() or homeDir
+    atom.project.getPaths()[0] or homeDir
 
   # Resolves the path being inputted in the dialog, up to the last slash
   inputPath: () ->
@@ -210,7 +210,7 @@ class AdvancedFileView extends View
 
   suggestPath: ->
     if atom.config.get 'advanced-new-file.suggestCurrentFilePath'
-      activePath = atom.workspace.getActiveEditor()?.getPath()
+      activePath = atom.workspace.getActiveTextEditor()?.getPath()
       if activePath
         activeDir = path.dirname(activePath) + '/'
         suggestedPath = path.relative @referenceDir(), activeDir
