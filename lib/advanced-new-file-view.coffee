@@ -14,6 +14,7 @@ class AdvancedFileView extends View
     suggestCurrentFilePath: false
     showFilesInAutoComplete: false
     caseSensitiveAutoCompletion: false
+    addTextFromSelection: false
 
   @activate: (state) ->
     @advancedFileView = new AdvancedFileView(state.advancedFileViewState)
@@ -196,6 +197,7 @@ class AdvancedFileView extends View
         pathToComplete = @getLastSearchedFile()
         @autocomplete pathToComplete
       else if ev.keyCode is 8
+        ## Remove whole folder in path instead of one letter
         if  atom.config.get 'advanced-new-file.removeWholeFolder'
           absolutePathToFile = @inputFullPath()
           if fs.existsSync(absolutePathToFile) and fs.statSync(absolutePathToFile)
@@ -204,7 +206,12 @@ class AdvancedFileView extends View
             fileSep = editorText.lastIndexOf(@PATH_SEPARATOR)
             substr = Math.max(pathSepIndex, fileSep)
             @miniEditor.setText(editorText.substring(0, substr))
-
+    ## Add selected text
+    if atom.config.get 'advanced-new-file.addTextFromSelection'
+      selection = atom.workspace.getActiveTextEditor().getSelection();
+      if !selection.empty?
+        text = @miniEditor.getText() + selection.getText()
+        @miniEditor.setText(text);
     @miniEditor.focus()
     @getFileList (files) -> @renderAutocompleteList files
 
@@ -215,7 +222,6 @@ class AdvancedFileView extends View
         activeDir = path.dirname(activePath) + '/'
         suggestedPath = path.relative @referenceDir(), activeDir
         @miniEditor.setText suggestedPath + '/'
-
 
   toggle: ->
     if @hasParent()
