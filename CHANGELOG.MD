@@ -1,6 +1,11 @@
 0.3.0 (Feb 14 2015)
 ===================
 
+* Add text from selection only if there is active text editor
+
+0.3.0 (Feb 14 2015)
+===================
+
 * Removed deprecation calls  #6
 * New setting for inserting selection to the input field #7
 
