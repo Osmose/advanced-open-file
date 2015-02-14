@@ -1,3 +1,9 @@
+0.3.0 (Feb 14 2015)
+===================
+
+* Removed deprecation calls  #6
+* New setting for inserting selection to the input field #7
+
 0.2.2 (Feb 7 2015)
 ===================
 
