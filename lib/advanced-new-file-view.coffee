@@ -207,7 +207,7 @@ class AdvancedFileView extends View
             substr = Math.max(pathSepIndex, fileSep)
             @miniEditor.setText(editorText.substring(0, substr))
     ## Add selected text
-    if atom.config.get 'advanced-new-file.addTextFromSelection'
+    if atom.config.get 'advanced-new-file.addTextFromSelection' and atom.workspace.getActiveTextEditor()
       selection = atom.workspace.getActiveTextEditor().getSelection();
       if !selection.empty?
         text = @miniEditor.getText() + selection.getText()
