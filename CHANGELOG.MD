@@ -1,4 +1,9 @@
-0.3.0 (Feb 14 2015)
+0.3.2 (Feb 14 2015)
+===================
+
+* Focus editor on the start of the package
+
+0.3.1 (Feb 14 2015)
 ===================
 
 * Add text from selection only if there is active text editor
