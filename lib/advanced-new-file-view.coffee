@@ -170,15 +170,14 @@ class AdvancedFileView extends View
     miniEditorFocused = @miniEditor.isFocused
     @keyUpListener.off()
     super
-
+    @panel?.hide()
     @restoreFocus() if miniEditorFocused
     @detaching = false
 
   attach: ->
     @suggestPath()
     @previouslyFocusedElement = $(':focus')
-    atom.workspaceView.append(this)
-
+    @panel = atom.workspace.addModalPanel(item: this)
 
     @miniEditor.on 'focusout', => @detach() unless @detaching
 
@@ -227,8 +226,6 @@ class AdvancedFileView extends View
   restoreFocus: ->
     if @previouslyFocusedElement?.isOnDom()
       @previouslyFocusedElement.focus()
-    else
-      atom.workspaceView.focus()
 
   longestCommonPrefix: (fileNames) ->
     if (fileNames?.length == 0)
