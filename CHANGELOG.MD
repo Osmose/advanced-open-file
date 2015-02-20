@@ -1,3 +1,9 @@
+0.3.3 (Feb 15 2015)
+===================
+
+* Uncaught TypeError: undefined is not a function #9
+
+
 0.3.2 (Feb 14 2015)
 ===================
 
