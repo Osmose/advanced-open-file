@@ -103,7 +103,7 @@ class AdvancedFileView extends View
       if files?.length is 1
         newPath = path.join(@inputPath(), files[0].name)
 
-        suffix = if files[0].isDir then '/' else ''
+        suffix = if files[0].isDir then path.sep else ''
         @updatePath(newPath + suffix, textWithoutSuggestion)
 
       else if files?.length > 1
@@ -220,9 +220,9 @@ class AdvancedFileView extends View
     if atom.config.get 'advanced-new-file.suggestCurrentFilePath'
       activePath = atom.workspace.getActiveTextEditor()?.getPath()
       if activePath
-        activeDir = path.dirname(activePath) + '/'
+        activeDir = path.dirname(activePath) + path.sep
         suggestedPath = path.relative @referenceDir(), activeDir
-        @miniEditor.setText suggestedPath + '/'
+        @miniEditor.setText suggestedPath + path.sep
 
   toggle: ->
     if @hasParent()
