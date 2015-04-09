@@ -2,6 +2,7 @@
 fs = require 'fs'
 path = require 'path'
 mkdirp = require 'mkdirp'
+touch = require 'touch'
 
 module.exports =
 class AdvancedFileView extends View
@@ -15,6 +16,7 @@ class AdvancedFileView extends View
     showFilesInAutoComplete: false
     caseSensitiveAutoCompletion: false
     addTextFromSelection: false
+    createFileInstantly: false
 
   @activate: (state) ->
     @advancedFileView = new AdvancedFileView(state.advancedFileViewState)
@@ -156,6 +158,8 @@ class AdvancedFileView extends View
         if /\/$/.test(pathToCreate)
           mkdirp pathToCreate
         else
+          if atom.config.get 'advanced-new-file.createFileInstantly'
+            touch pathToCreate
           atom.workspace.open pathToCreate
       catch error
         @setMessage 'alert', error.message

@@ -21,3 +21,4 @@ All settings can be turned on and off via the built-in settings tab (`cmd-,`) an
 - Show Files In Auto Completion
 - Suggest Current File Path
 - Remove whole folder
+- Create file instantly
