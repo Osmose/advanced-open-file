@@ -25,7 +25,7 @@ class AdvancedFileView extends View
     @advancedFileView.detach()
 
   @content: (params)->
-    @div class: 'advanced-new-file overlay from-top', =>
+    @div class: 'advanced-new-file', =>
       @p outlet:'message', class:'icon icon-file-add', "Enter the path for the new file/directory. Directories end with a '" + path.sep + "'."
       @subview 'miniEditor', new TextEditorView({mini:true})
       @ul class: 'list-group', outlet: 'directoryList'
