@@ -1,3 +1,9 @@
+0.4.0 (Apr 14 2015)
+==================
+* Added option for creating file immediately (thanks to silentvick)
+* Fixed problem with overlay in Atom One theme (thanks to silentvick)
+
+
 0.3.3 (Feb 15 2015)
 ===================
 
