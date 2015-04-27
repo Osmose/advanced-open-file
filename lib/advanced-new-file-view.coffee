@@ -154,11 +154,13 @@ class AdvancedFileView extends View
 
     for relativePath in relativePaths
       pathToCreate = path.join(@referenceDir(), relativePath)
+      createWithin = path.dirname(pathToCreate)
       try
         if /\/$/.test(pathToCreate)
           mkdirp pathToCreate
         else
           if atom.config.get 'advanced-new-file.createFileInstantly'
+            mkdirp createWithin unless fs.existsSync(createWithin) and fs.statSync(createWithin)
             touch pathToCreate
           atom.workspace.open pathToCreate
       catch error
