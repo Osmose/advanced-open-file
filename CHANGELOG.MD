@@ -1,3 +1,7 @@
+0.4.1 (Apr 27 2015)
+==================
+* Resolved problem with creating folder if create file instantly was set to true (thanks to phyllisstein)
+
 0.4.0 (Apr 14 2015)
 ==================
 * Added option for creating file immediately (thanks to silentvick)
