@@ -3,9 +3,11 @@
   "main": "./lib/advanced-new-file-view",
   "version": "0.4.1",
   "description": "Updated version of Fancy New File. Create multiple files and directories by typing a relative path.",
-  "activationEvents": [
-    "advanced-new-file:toggle"
-  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "advanced-new-file:toggle"
+    ]
+  },
   "repository": "https://github.com/Trudko/advanced-new-file",
   "license": "MIT",
   "engines": {
