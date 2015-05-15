@@ -10,13 +10,25 @@ class AdvancedFileView extends View
   advancedFileView: null
   keyUpListener: null
 
-  @configDefaults:
-    removeWholeFolder: true
-    suggestCurrentFilePath: false
-    showFilesInAutoComplete: false
-    caseSensitiveAutoCompletion: false
-    addTextFromSelection: false
-    createFileInstantly: false
+  @config:
+    removeWholeFolder:
+      type: 'boolean'
+      default: true
+    suggestCurrentFilePath:
+      type: 'boolean'
+      default: false
+    showFilesInAutoComplete:
+      type: 'boolean'
+      default: false
+    caseSensitiveAutoCompletion:
+      type: 'boolean'
+      default: false
+    addTextFromSelection:
+      type: 'boolean'
+      default: false
+    createFileInstantly:
+      type: 'boolean'
+      default: false
 
   @activate: (state) ->
     @advancedFileView = new AdvancedFileView(state.advancedFileViewState)
