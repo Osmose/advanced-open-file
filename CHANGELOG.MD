@@ -1,3 +1,9 @@
+0.4.2 (May 15 2015)
+===================
+
+* Updated Context menu and use activationCommands intead of actiovationEvents(thanks to zimme)
+* Removed deprecated configDefaults (thanks to olmokramer)
+
 0.4.1 (Apr 27 2015)
 ==================
 * Resolved problem with creating folder if create file instantly was set to true (thanks to phyllisstein)
@@ -6,7 +12,6 @@
 ==================
 * Added option for creating file immediately (thanks to silentvick)
 * Fixed problem with overlay in Atom One theme (thanks to silentvick)
-
 
 0.3.3 (Feb 15 2015)
 ===================
