@@ -1,3 +1,9 @@
+0.4.3 (May 22 2015)
+===================
+
+* Removed deprecated API for calling listening for core:confirm and core:cancel
+
+
 0.4.2 (May 15 2015)
 ===================
 
