@@ -47,8 +47,9 @@ class AdvancedFileView extends View
   initialize: (serializeState) ->
     atom.commands.add 'atom-workspace', 'advanced-new-file:toggle', => @toggle()
     @miniEditor.getModel().setPlaceholderText(path.join('path','to','file.txt'));
-    @on 'core:confirm', => @confirm()
-    @on 'core:cancel', => @detach()
+    atom.commands.add @element,
+      'core:confirm': => @confirm()
+      'core:cancel': => @detach()
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
