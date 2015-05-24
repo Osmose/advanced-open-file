@@ -1,16 +1,16 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
 'context-menu':
   'atom-text-editor': [
-    'label': 'Advanced New File'
-    'command': 'advanced-new-file:toggle'
+    'label': 'Advanced Open File'
+    'command': 'advanced-open-file:toggle'
   ]
 
 'menu': [
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'Advanced New File'
-      'command': 'advanced-new-file:toggle'
+      'label': 'Advanced Open File'
+      'command': 'advanced-open-file:toggle'
     ]
   }
 ]

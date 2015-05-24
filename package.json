@@ -1,14 +1,14 @@
 {
-  "name": "advanced-new-file",
-  "main": "./lib/advanced-new-file-view",
-  "version": "0.4.3",
-  "description": "Updated version of Fancy New File. Create multiple files and directories by typing a relative path.",
+  "name": "advanced-open-file",
+  "main": "./lib/advanced-open-file-view",
+  "version": "0.5.0",
+  "description": "Fork of Advanced New File. Create and open multiple files and directories by typing a relative path.",
   "activationCommands": {
     "atom-workspace": [
-      "advanced-new-file:toggle"
+      "advanced-open-file:toggle"
     ]
   },
-  "repository": "https://github.com/Trudko/advanced-new-file",
+  "repository": "https://github.com/Osmose/advanced-open-file",
   "license": "MIT",
   "engines": {
     "atom": ">=0.175.0"

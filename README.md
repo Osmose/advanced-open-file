@@ -1,24 +1,23 @@
-# Advanced New File package
+# Advanced Open File
 
-Advanced New File is fork of existing package Fancy New File. First of all let me thank rev087 - author of Fancy New File for great work.
-I forked this folder because old one wasn't maintained for few months and I couldn't contact the author.
+Advanced Open File is fork of
+[Advanced New File](https://github.com/Trudko/advanced-new-file), itself
+a fork of [Fancy New File](https://github.com/rev087/fancy-new-file).
+Thanks to both rev087 and Trudko for their work.
 
-Advanced New File is a package for helping Atom users to create new files and folders more easily.
-It supports create new files and directory tree by typing a relative path with bash-like autocomplete support.
+Advanced Open File is a package for helping Atom users to open files and
+folders easily. It can also create new files and folders if they don't
+exist.
 
-If you have any ideas or even better pull requests, please let me know :)
-
-If you like Atom maybe you will like my blog www.atomtips.com.
-
-## Example
-![advanced-new-file](https://cloud.githubusercontent.com/assets/3289225/5792505/81f41c72-9f1b-11e4-9085-38cfb832383c.gif)
+It's basically Advanced New File, but it always shows files and can open
+files as well as create them.
 
 ## Settings:
 
-All settings can be turned on and off via the built-in settings tab (`cmd-,`) and selecting Advanced New File from the list of installed packages.
+All settings can be turned on and off via the built-in settings tab
+(`cmd-,`) and selecting Advanced Open File from the list of installed
+packages.
 
 - Case Sensitive Auto Completion
-- Show Files In Auto Completion
 - Suggest Current File Path
-- Remove whole folder
 - Create file instantly

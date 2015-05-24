@@ -11,15 +11,9 @@ class AdvancedFileView extends View
   keyUpListener: null
 
   @config:
-    removeWholeFolder:
-      type: 'boolean'
-      default: true
     suggestCurrentFilePath:
       type: 'boolean'
-      default: false
-    showFilesInAutoComplete:
-      type: 'boolean'
-      default: false
+      default: true
     caseSensitiveAutoCompletion:
       type: 'boolean'
       default: false
@@ -37,15 +31,15 @@ class AdvancedFileView extends View
     @advancedFileView.detach()
 
   @content: (params)->
-    @div class: 'advanced-new-file', =>
-      @p outlet:'message', class:'icon icon-file-add', "Enter the path for the new file/directory. Directories end with a '" + path.sep + "'."
+    @div class: 'advanced-open-file', =>
+      @p outlet:'message', class:'icon icon-file-add', "Enter the path for the file/directory. Directories end with a '" + path.sep + "'."
       @subview 'miniEditor', new TextEditorView({mini:true})
       @ul class: 'list-group', outlet: 'directoryList'
 
   @detaching: false,
 
   initialize: (serializeState) ->
-    atom.commands.add 'atom-workspace', 'advanced-new-file:toggle', => @toggle()
+    atom.commands.add 'atom-workspace', 'advanced-open-file:toggle', => @toggle()
     @miniEditor.getModel().setPlaceholderText(path.join('path','to','file.txt'));
     atom.commands.add @element,
       'core:confirm': => @confirm()
@@ -55,6 +49,7 @@ class AdvancedFileView extends View
   referenceDir: () ->
     homeDir = process.env.HOME or process.env.HOMEPATH or process.env.USERPROFILE
     atom.project.getPaths()[0] or homeDir
+    '/'
 
   # Resolves the path being inputted in the dialog, up to the last slash
   inputPath: () ->
@@ -85,7 +80,7 @@ class AdvancedFileView extends View
 
         files.forEach (filename) =>
           fragment = input.substr(input.lastIndexOf(path.sep) + 1, input.length)
-          caseSensitive = atom.config.get 'advanced-new-file.caseSensitiveAutoCompletion'
+          caseSensitive = atom.config.get 'advanced-open-file.caseSensitiveAutoCompletion'
 
           if not caseSensitive
             fragment = fragment.toLowerCase()
@@ -102,10 +97,7 @@ class AdvancedFileView extends View
 
             (if isDir then dirList else fileList).push name:filename, isDir:isDir
 
-        if atom.config.get 'advanced-new-file.showFilesInAutoComplete'
-          callback.apply @, [dirList.concat fileList]
-        else
-          callback.apply @, [dirList]
+        callback.apply @, [dirList.concat fileList]
 
 
   # Called only when pressing Tab to trigger auto-completion
@@ -119,22 +111,22 @@ class AdvancedFileView extends View
         newPath = path.join(@inputPath(), files[0].name)
 
         suffix = if files[0].isDir then path.sep else ''
-        @updatePath(newPath + suffix, textWithoutSuggestion)
+        @updatePath(newPath + suffix)
 
       else if files?.length > 1
+        console.log('longer')
         longestPrefix = @longestCommonPrefix((file.name for file in files))
         newPath = path.join(@inputPath(), longestPrefix)
 
         if (newPath.length > @inputFullPath().length)
-          @updatePath(newPath, textWithoutSuggestion)
+          @updatePath(newPath)
         else
           atom.beep()
       else
         atom.beep()
 
-  updatePath: (newPath, oldPath) ->
-    relativePath = oldPath + atom.project.relativize(newPath)
-    @miniEditor.setText relativePath
+  updatePath: (newPath) ->
+    @miniEditor.setText newPath
 
   update: ->
     @getFileList (files) ->
@@ -151,7 +143,7 @@ class AdvancedFileView extends View
       + ' icon-file-directory-create'\
       + ' icon-alert'
     if icon? then @message.addClass 'icon icon-' + icon
-    @message.text str or "Enter the path for the new file/directory. Directories end with a '" + path.sep + "'."
+    @message.text str or "Enter the path for the file/directory. Directories end with a '" + path.sep + "'."
 
   # Renders the list of directories
   renderAutocompleteList: (files) ->
@@ -163,23 +155,31 @@ class AdvancedFileView extends View
           @span class: "icon #{icon}", file.name
 
   confirm: ->
-    relativePaths = @miniEditor.getText().split(@PATH_SEPARATOR)
+    inputPath = @miniEditor.getText()
+    if fs.existsSync(inputPath)
+      if fs.statSync(inputPath).isFile()
+        atom.workspace.open inputPath
+        @detach()
+      else
+        atom.beep()
+    else
+      relativePaths = inputPath.split(@PATH_SEPARATOR)
 
-    for relativePath in relativePaths
-      pathToCreate = path.join(@referenceDir(), relativePath)
-      createWithin = path.dirname(pathToCreate)
-      try
-        if /\/$/.test(pathToCreate)
-          mkdirp pathToCreate
-        else
-          if atom.config.get 'advanced-new-file.createFileInstantly'
-            mkdirp createWithin unless fs.existsSync(createWithin) and fs.statSync(createWithin)
-            touch pathToCreate
-          atom.workspace.open pathToCreate
-      catch error
-        @setMessage 'alert', error.message
+      for relativePath in relativePaths
+        pathToCreate = path.join(@referenceDir(), relativePath)
+        createWithin = path.dirname(pathToCreate)
+        try
+          if /\/$/.test(pathToCreate)
+            mkdirp pathToCreate
+          else
+            if atom.config.get 'advanced-open-file.createFileInstantly'
+              mkdirp createWithin unless fs.existsSync(createWithin) and fs.statSync(createWithin)
+              touch pathToCreate
+            atom.workspace.open pathToCreate
+        catch error
+          @setMessage 'alert', error.message
 
-    @detach()
+      @detach()
 
   detach: ->
     return unless @hasParent()
@@ -216,18 +216,8 @@ class AdvancedFileView extends View
         consumeKeypress ev
         pathToComplete = @getLastSearchedFile()
         @autocomplete pathToComplete
-      else if ev.keyCode is 8
-        ## Remove whole folder in path instead of one letter
-        if  atom.config.get 'advanced-new-file.removeWholeFolder'
-          absolutePathToFile = @inputFullPath()
-          if fs.existsSync(absolutePathToFile) and fs.statSync(absolutePathToFile)
-            editorText = @miniEditor.getText()
-            pathSepIndex = editorText.lastIndexOf(path.sep) + 1
-            fileSep = editorText.lastIndexOf(@PATH_SEPARATOR)
-            substr = Math.max(pathSepIndex, fileSep)
-            @miniEditor.setText(editorText.substring(0, substr))
     ## Add selected text
-    if atom.config.get('advanced-new-file.addTextFromSelection') and atom.workspace.getActiveTextEditor()
+    if atom.config.get('advanced-open-file.addTextFromSelection') and atom.workspace.getActiveTextEditor()
       selection = atom.workspace.getActiveTextEditor().getSelection();
       if !selection.empty?
         text = @miniEditor.getText() + selection.getText()
@@ -236,12 +226,12 @@ class AdvancedFileView extends View
     @getFileList (files) -> @renderAutocompleteList files
 
   suggestPath: ->
-    if atom.config.get 'advanced-new-file.suggestCurrentFilePath'
+    if atom.config.get 'advanced-open-file.suggestCurrentFilePath'
       activePath = atom.workspace.getActiveTextEditor()?.getPath()
       if activePath
         activeDir = path.dirname(activePath) + path.sep
         suggestedPath = path.relative @referenceDir(), activeDir
-        @miniEditor.setText suggestedPath + path.sep
+        @miniEditor.setText activeDir
 
   toggle: ->
     if @hasParent()

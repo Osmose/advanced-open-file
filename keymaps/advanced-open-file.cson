@@ -8,7 +8,7 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
 '.platform-darwin atom-workspace':
-  'alt-cmd-n': 'advanced-new-file:toggle'
+  'alt-cmd-o': 'advanced-open-file:toggle'
 
 '.platform-win32 atom-workspace, .platform-linux atom-workspace':
-  'ctrl-alt-n': 'advanced-new-file:toggle'
+  'ctrl-alt-o': 'advanced-open-file:toggle'
