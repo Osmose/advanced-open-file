@@ -1,5 +1,6 @@
 {$, $$, View, TextEditorView} = require 'atom-space-pen-views'
 fs = require 'fs'
+os = require 'os'
 path = require 'path'
 mkdirp = require 'mkdirp'
 touch = require 'touch'
@@ -7,6 +8,7 @@ touch = require 'touch'
 module.exports =
 class AdvancedFileView extends View
   PATH_SEPARATOR: ","
+  FS_ROOT: if os.platform == "win32" then process.cwd().split(path.sep)[0] else "/"
   advancedFileView: null
   keyUpListener: null
 
@@ -24,7 +26,7 @@ class AdvancedFileView extends View
   @deactivate: ->
     @advancedFileView.detach()
 
-  @content: (params)->
+  @content: (params) ->
     @div class: 'advanced-open-file', =>
       @p outlet:'message', class:'icon icon-file-add', "Enter the path for the file/directory. Directories end with a '" + path.sep + "'."
       @subview 'miniEditor', new TextEditorView({mini:true})
@@ -38,6 +40,24 @@ class AdvancedFileView extends View
     atom.commands.add @element,
       'core:confirm': => @confirm()
       'core:cancel': => @detach()
+    @directoryList.on 'click', '.list-item', (ev) => @clickItem(ev)
+
+  clickItem: (ev) ->
+    listItem = $(ev.target)
+    isDir = listItem.hasClass('directory')
+
+    if listItem.text() == '..'
+      newPath = path.dirname @inputPath()
+    else
+      newPath = path.join @inputPath(), listItem.text()
+      if isDir
+        newPath += path.sep
+
+    if not isDir
+      @confirm newPath
+    else
+      @updatePath newPath
+      @miniEditor.focus()
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
@@ -71,6 +91,9 @@ class AdvancedFileView extends View
       fs.readdir @inputPath(), (err, files) =>
         fileList = []
         dirList = []
+
+        if input and input != @FS_ROOT
+          dirList.push name: '..', isDir: true
 
         files.forEach (filename) =>
           fragment = input.substr(input.lastIndexOf(path.sep) + 1, input.length)
@@ -144,11 +167,11 @@ class AdvancedFileView extends View
     files?.forEach (file) =>
       icon = if file.isDir then 'icon-file-directory' else 'icon-file-text'
       @directoryList.append $$ ->
-        @li class: 'list-item', =>
+        @li class: "list-item #{'directory' if file.isDir}", =>
           @span class: "icon #{icon}", file.name
 
-  confirm: ->
-    inputPath = @miniEditor.getText()
+  confirm: (pathToConfirm) ->
+    inputPath = pathToConfirm or @miniEditor.getText()
     if fs.existsSync(inputPath)
       if fs.statSync(inputPath).isFile()
         atom.workspace.open inputPath
@@ -175,6 +198,8 @@ class AdvancedFileView extends View
       @detach()
 
   detach: ->
+    $('html').off('click', @outsideClickHandler) unless not @outsideClickHandler
+    @outsideClickHandler = null
     return unless @hasParent()
     @detaching = true
     @miniEditor.setText ''
@@ -192,7 +217,12 @@ class AdvancedFileView extends View
     @previouslyFocusedElement = $(':focus')
     @panel = atom.workspace.addModalPanel(item: this)
 
-    @miniEditor.on 'focusout', => @detach() unless @detaching
+    # Detach when clicked outside.
+    @outsideClickHandler = (ev) =>
+      if not $(ev.target).closest('.advanced-open-file').length
+        @detach()
+    $('html').on 'click', @outsideClickHandler
+
     @miniEditor.focus()
 
     consumeKeypress = (ev) => ev.preventDefault(); ev.stopPropagation()
