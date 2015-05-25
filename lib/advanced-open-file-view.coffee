@@ -44,20 +44,17 @@ class AdvancedFileView extends View
 
   clickItem: (ev) ->
     listItem = $(ev.target)
-    isDir = listItem.hasClass('directory')
 
-    if listItem.text() == '..'
-      newPath = path.dirname @inputPath()
+    if listItem.hasClass 'parent-directory'
+      @updatePath path.dirname(@inputPath()) + path.sep
     else
       newPath = path.join @inputPath(), listItem.text()
-      if isDir
-        newPath += path.sep
+      if not listItem.hasClass 'directory'
+        @confirm newPath
+      else
+        @updatePath newPath + path.sep
 
-    if not isDir
-      @confirm newPath
-    else
-      @updatePath newPath
-      @miniEditor.focus()
+    @miniEditor.focus()
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
@@ -91,9 +88,6 @@ class AdvancedFileView extends View
       fs.readdir @inputPath(), (err, files) =>
         fileList = []
         dirList = []
-
-        if input and input != @FS_ROOT
-          dirList.push name: '..', isDir: true
 
         files.forEach (filename) =>
           fragment = input.substr(input.lastIndexOf(path.sep) + 1, input.length)
@@ -164,6 +158,14 @@ class AdvancedFileView extends View
   # Renders the list of directories
   renderAutocompleteList: (files) ->
     @directoryList.empty()
+
+    # Parent directory
+    input = @getLastSearchedFile()
+    if input and input != @FS_ROOT
+      @directoryList.append $$ ->
+        @li class: 'list-item parent-directory', =>
+          @span class: 'icon icon-file-directory', '..'
+
     files?.forEach (file) =>
       icon = if file.isDir then 'icon-file-directory' else 'icon-file-text'
       @directoryList.append $$ ->
