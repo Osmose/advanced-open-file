@@ -1,9 +1,30 @@
-{$, $$, View, TextEditorView} = require 'atom-space-pen-views'
+{$, $$, View, TextEditorView, ScrollView} = require 'atom-space-pen-views'
 fs = require 'fs'
 os = require 'os'
 path = require 'path'
 mkdirp = require 'mkdirp'
 touch = require 'touch'
+
+
+class DirectoryListView extends ScrollView
+  @content: ->
+    @ul class: 'list-group', outlet: 'directoryList'
+
+  renderFiles: (files, hasParent) ->
+    @empty()
+
+    # Parent directory
+    if hasParent
+      @append $$ ->
+        @li class: 'list-item parent-directory', =>
+          @span class: 'icon icon-file-directory', '..'
+
+    files?.forEach (file) =>
+      icon = if file.isDir then 'icon-file-directory' else 'icon-file-text'
+      @append $$ ->
+        @li class: "list-item #{'directory' if file.isDir}", =>
+          @span class: "icon #{icon}", file.name
+
 
 module.exports =
 class AdvancedFileView extends View
@@ -30,7 +51,7 @@ class AdvancedFileView extends View
     @div class: 'advanced-open-file', =>
       @p outlet:'message', class:'icon icon-file-add', "Enter the path for the file/directory. Directories end with a '" + path.sep + "'."
       @subview 'miniEditor', new TextEditorView({mini:true})
-      @ul class: 'list-group', outlet: 'directoryList'
+      @subview 'directoryListView', new DirectoryListView()
 
   @detaching: false,
 
@@ -40,7 +61,7 @@ class AdvancedFileView extends View
     atom.commands.add @element,
       'core:confirm': => @confirm()
       'core:cancel': => @detach()
-    @directoryList.on 'click', '.list-item', (ev) => @clickItem(ev)
+    @directoryListView.on 'click', '.list-item', (ev) => @clickItem(ev)
 
   clickItem: (ev) ->
     listItem = $(ev.target)
@@ -157,20 +178,8 @@ class AdvancedFileView extends View
 
   # Renders the list of directories
   renderAutocompleteList: (files) ->
-    @directoryList.empty()
-
-    # Parent directory
     input = @getLastSearchedFile()
-    if input and input != @FS_ROOT
-      @directoryList.append $$ ->
-        @li class: 'list-item parent-directory', =>
-          @span class: 'icon icon-file-directory', '..'
-
-    files?.forEach (file) =>
-      icon = if file.isDir then 'icon-file-directory' else 'icon-file-text'
-      @directoryList.append $$ ->
-        @li class: "list-item #{'directory' if file.isDir}", =>
-          @span class: "icon #{icon}", file.name
+    @directoryListView.renderFiles files, input and input != @FS_ROOT
 
   confirm: (pathToConfirm) ->
     inputPath = pathToConfirm or @miniEditor.getText()
@@ -206,11 +215,11 @@ class AdvancedFileView extends View
     @detaching = true
     @miniEditor.setText ''
     @setMessage()
-    @directoryList.empty()
+    @directoryListView.empty()
     miniEditorFocused = @miniEditor.hasFocus()
     @keyUpListener.off()
     super
-    @panel?.hide()
+    @panel?.destroy()
     @restoreFocus() if miniEditorFocused
     @detaching = false
 
