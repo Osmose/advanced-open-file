@@ -11,13 +11,7 @@ class AdvancedFileView extends View
   keyUpListener: null
 
   @config:
-    suggestCurrentFilePath:
-      type: 'boolean'
-      default: true
     caseSensitiveAutoCompletion:
-      type: 'boolean'
-      default: false
-    addTextFromSelection:
       type: 'boolean'
       default: false
     createFileInstantly:
@@ -114,7 +108,6 @@ class AdvancedFileView extends View
         @updatePath(newPath + suffix)
 
       else if files?.length > 1
-        console.log('longer')
         longestPrefix = @longestCommonPrefix((file.name for file in files))
         newPath = path.join(@inputPath(), longestPrefix)
 
@@ -187,7 +180,7 @@ class AdvancedFileView extends View
     @miniEditor.setText ''
     @setMessage()
     @directoryList.empty()
-    miniEditorFocused = @miniEditor.isFocused
+    miniEditorFocused = @miniEditor.hasFocus()
     @keyUpListener.off()
     super
     @panel?.hide()
@@ -216,22 +209,16 @@ class AdvancedFileView extends View
         consumeKeypress ev
         pathToComplete = @getLastSearchedFile()
         @autocomplete pathToComplete
-    ## Add selected text
-    if atom.config.get('advanced-open-file.addTextFromSelection') and atom.workspace.getActiveTextEditor()
-      selection = atom.workspace.getActiveTextEditor().getSelection();
-      if !selection.empty?
-        text = @miniEditor.getText() + selection.getText()
-        @miniEditor.setText(text);
+
     @miniEditor.focus()
     @getFileList (files) -> @renderAutocompleteList files
 
   suggestPath: ->
-    if atom.config.get 'advanced-open-file.suggestCurrentFilePath'
-      activePath = atom.workspace.getActiveTextEditor()?.getPath()
-      if activePath
-        activeDir = path.dirname(activePath) + path.sep
-        suggestedPath = path.relative @referenceDir(), activeDir
-        @miniEditor.setText activeDir
+    activePath = atom.workspace.getActiveTextEditor()?.getPath()
+    if activePath
+      activeDir = path.dirname(activePath) + path.sep
+      suggestedPath = path.relative @referenceDir(), activeDir
+      @miniEditor.setText activeDir
 
   toggle: ->
     if @hasParent()
@@ -242,6 +229,8 @@ class AdvancedFileView extends View
   restoreFocus: ->
     if @previouslyFocusedElement?.isOnDom()
       @previouslyFocusedElement.focus()
+    else
+      atom.views.getView(atom.workspace).focus()
 
   longestCommonPrefix: (fileNames) ->
     if (fileNames?.length == 0)
