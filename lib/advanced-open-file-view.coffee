@@ -67,7 +67,8 @@ class AdvancedFileView extends View
     listItem = $(ev.target)
 
     if listItem.hasClass 'parent-directory'
-      @updatePath path.dirname(@inputPath()) + path.sep
+      newPath = path.dirname(@inputPath())
+      @updatePath newPath + (if newPath != @FS_ROOT then path.sep else '')
     else
       newPath = path.join @inputPath(), listItem.text()
       if not listItem.hasClass 'directory'
