@@ -228,6 +228,12 @@ class AdvancedFileView extends View
     @previouslyFocusedElement = $(':focus')
     @panel = atom.workspace.addModalPanel(item: this)
 
+    @parent('.modal').css({
+      'max-height': '100%',
+      display: 'flex',
+      'flex-direction': 'column',
+    })
+
     # Detach when clicked outside.
     @outsideClickHandler = (ev) =>
       if not $(ev.target).closest('.advanced-open-file').length
