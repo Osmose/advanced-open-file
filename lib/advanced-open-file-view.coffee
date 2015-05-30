@@ -6,6 +6,11 @@ mkdirp = require 'mkdirp'
 touch = require 'touch'
 
 
+blockEvent = (ev) ->
+  ev.preventDefault()
+  ev.stopPropagation()
+
+
 class DirectoryListView extends ScrollView
   @content: ->
     @ul class: 'list-group', outlet: 'directoryList'
@@ -65,7 +70,10 @@ class AdvancedFileView extends View
 
   clickItem: (ev) ->
     listItem = $(ev.target)
+    @selectItem listItem
+    @miniEditor.focus()
 
+  selectItem: (listItem) ->
     if listItem.hasClass 'parent-directory'
       newPath = path.dirname(@inputPath())
       @updatePath newPath + (if newPath != @FS_ROOT then path.sep else '')
@@ -75,8 +83,6 @@ class AdvancedFileView extends View
         @confirm newPath
       else
         @updatePath newPath + path.sep
-
-    @miniEditor.focus()
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
@@ -248,13 +254,37 @@ class AdvancedFileView extends View
     # Populate the directory listing live
     @miniEditor.getModel().onDidChange => @update()
 
-    # Consume the keydown event from holding down the Tab key
-    @miniEditor.on 'keydown', (ev) => if ev.keyCode is 9 then consumeKeypress ev
+    # Handle keyboard movement
+    @miniEditor.on 'keydown', (ev) =>
+      if ev.keyCode is 9
+        blockEvent ev
+        return
+
+      selected = @find('.list-item.selected')
+      if ev.keyCode is 13 # Enter
+        blockEvent ev
+        @selectItem selected
+        return
+
+      if ev.keyCode is 40 # Down
+        blockEvent ev
+        selected = selected.next()
+        if selected.length < 1
+          selected = @find('.list-item:first')
+      else if ev.keyCode is 38 # Up
+        blockEvent ev
+        selected = selected.prev()
+        if selected.length < 1
+          selected = @find('.list-item:last')
+
+      @find('.list-item').removeClass('selected')
+      selected.addClass('selected')
 
     # Handle the Tab completion
     @keyUpListener = @miniEditor.on 'keyup', (ev) =>
       if ev.keyCode is 9
-        consumeKeypress ev
+        ev.preventDefault()
+        ev.stopPropagation()
         pathToComplete = @getLastSearchedFile()
         @autocomplete pathToComplete
 
