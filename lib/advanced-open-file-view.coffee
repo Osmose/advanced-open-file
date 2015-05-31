@@ -249,8 +249,6 @@ class AdvancedFileView extends View
 
     @miniEditor.focus()
 
-    consumeKeypress = (ev) => ev.preventDefault(); ev.stopPropagation()
-
     # Populate the directory listing live
     @miniEditor.getModel().onDidChange => @update()
 
@@ -261,7 +259,7 @@ class AdvancedFileView extends View
         return
 
       selected = @find('.list-item.selected')
-      if ev.keyCode is 13 # Enter
+      if ev.keyCode is 13 and selected.length > 0 # Enter
         blockEvent ev
         @selectItem selected
         return
