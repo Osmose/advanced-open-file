@@ -1,3 +1,10 @@
+0.7.1 (May 30 2015)
+===================
+
+* Add a GIF to the README (and publish a new release so atom.io picks it
+  up).
+
+
 0.7.0 (May 30 2015)
 ===================
 
