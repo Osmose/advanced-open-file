@@ -8,6 +8,8 @@ rev087 and Trudko for their work.
 Advanced Open File is a package for helping Atom users to open files and folders
 easily. It can also create new files and folders if they don't exist.
 
+![Demo of plugin functionality](http://osmose.github.io/advanced-open-file/demo.gif)
+
 ## Usage
 
 Hit `Cmd-Alt-O`/`Ctrl-Alt-O` to open the file list to the directory of the
