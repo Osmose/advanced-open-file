@@ -18,6 +18,11 @@ Hit `Enter` to open the file at the given path. If the file doesn't exist, a tab
 will be opened that will save to that file. Any directories in the path that
 don't exist will be created immediately upon hitting `Enter`.
 
+You can also click on any entry in the file list to add it to the current path
+(in the case of a directory) or to open it immediately (in the case of a file).
+You can also use the `Up` and `Down` arrow keys to scroll through the list, and
+`Enter` to select the currently-highlighted item.
+
 You can also remap the command to any key you want. For example, add the
 following to your keymap to map `Ctrl-x Ctrl-f` to open the dialog:
 
