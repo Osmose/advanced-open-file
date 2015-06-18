@@ -101,8 +101,8 @@ class AdvancedFileView extends View
 
   getLastSearchedFile: () ->
     input = @miniEditor.getText()
-    commanIndex = input.lastIndexOf(@PATH_SEPARATOR) + 1
-    input.substring(commanIndex, input.length)
+    commonIndex = input.lastIndexOf(@PATH_SEPARATOR) + 1
+    input.substring(commonIndex, input.length)
 
 
   # Returns the list of directories matching the current input (path and autocomplete fragment)
@@ -293,8 +293,11 @@ class AdvancedFileView extends View
     activePath = atom.workspace.getActiveTextEditor()?.getPath()
     if activePath
       activeDir = path.dirname(activePath) + path.sep
-      suggestedPath = path.relative @referenceDir(), activeDir
       @miniEditor.setText activeDir
+    else
+      projectPaths = atom.project.getPaths()
+      if projectPaths.length > 0
+        @miniEditor.setText projectPaths[0] + path.sep
 
   toggle: ->
     if @hasParent()

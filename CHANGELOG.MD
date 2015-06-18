@@ -1,3 +1,9 @@
+0.7.2 (June 17 2015)
+===================
+
+* Default to project root when showing dialog while no tab is active.
+
+
 0.7.1 (May 30 2015)
 ===================
 
