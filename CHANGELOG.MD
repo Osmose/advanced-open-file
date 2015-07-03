@@ -1,3 +1,9 @@
+0.7.3 (July 3 2015)
+===================
+
+* Add option for Helm-style fast directory switching.
+
+
 0.7.2 (June 17 2015)
 ===================
 

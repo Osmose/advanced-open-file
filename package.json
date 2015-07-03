@@ -14,8 +14,9 @@
     "atom": ">=0.175.0"
   },
   "dependencies": {
-    "mkdirp": "^0.3.5",
     "atom-space-pen-views": "^2.0.3",
+    "mkdirp": "^0.3.5",
+    "osenv": "^0.1.3",
     "touch": "0.0.3"
   }
 }

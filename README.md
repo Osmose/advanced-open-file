@@ -39,10 +39,28 @@ following to your keymap to map `Ctrl-x Ctrl-f` to open the dialog:
   <dt>Case-sensitive auto-completion</dt>
   <dd>Control whether auto-completion is case-sensitive. Defaults to false.</dd>
 
-  <dt>Create file instantly</dt>
+  <dt>Create files instantly</dt>
   <dd>
     If checked, files are created immediately instead of on save if they don't
     exist.
+  </dd>
+
+  <dt>Helm-style fast directory switching</dt>
+  <dd>
+    <p>
+      When enabled, allows for quick directory switching when appending certain
+      strings to a path that ends in a slash:
+    </p>
+    <ul>
+      <li>
+        Adding an extra slash (e.g. <code>/</code>) will switch to the
+        filesystem root.
+      </li>
+      <li>
+        Adding a tilde and a slash (e.g. <code>~/</code>) will switch to the
+        current user's home directory.
+      </li>
+    </ul>
   </dd>
 </dl>
 

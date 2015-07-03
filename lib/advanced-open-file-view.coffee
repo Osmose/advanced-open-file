@@ -1,6 +1,7 @@
 {$, $$, View, TextEditorView, ScrollView} = require 'atom-space-pen-views'
 fs = require 'fs'
 os = require 'os'
+osenv = require 'osenv'
 path = require 'path'
 mkdirp = require 'mkdirp'
 touch = require 'touch'
@@ -40,9 +41,18 @@ class AdvancedFileView extends View
 
   @config:
     caseSensitiveAutoCompletion:
+      title: 'Case-sensitive auto-completion'
       type: 'boolean'
       default: false
     createFileInstantly:
+      title: 'Create files instantly'
+      description: 'When opening files that don\'t exist, create them
+                    immediately instead of on save.'
+      type: 'boolean'
+      default: false
+    helmDirSwitch:
+      title: 'Helm-style fast directory switching'
+      description: 'See README for details.'
       type: 'boolean'
       default: false
 
@@ -86,8 +96,7 @@ class AdvancedFileView extends View
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
-    homeDir = process.env.HOME or process.env.HOMEPATH or process.env.USERPROFILE
-    atom.project.getPaths()[0] or homeDir
+    atom.project.getPaths()[0] or osenv.home()
     '/'
 
   # Resolves the path being inputted in the dialog, up to the last slash
@@ -167,6 +176,13 @@ class AdvancedFileView extends View
     @miniEditor.setText newPath
 
   update: ->
+    if atom.config.get 'advanced-open-file.helmDirSwitch'
+      text = @miniEditor.getText()
+      if text.endsWith(path.sep + path.sep)
+        @updatePath @FS_ROOT
+      else if text.endsWith(path.sep + '~' + path.sep)
+        @updatePath osenv.home() + path.sep
+
     @getFileList (files) ->
       @renderAutocompleteList files
 
