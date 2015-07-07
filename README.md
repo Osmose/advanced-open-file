@@ -25,6 +25,9 @@ You can also click on any entry in the file list to add it to the current path
 You can also use the `Up` and `Down` arrow keys to scroll through the list, and
 `Enter` to select the currently-highlighted item.
 
+`Cmd-Z`/`Ctrl-Z` will undo changes made to the current path, such as
+autocompletion or directory shortcuts.
+
 You can also remap the command to any key you want. For example, add the
 following to your keymap to map `Ctrl-x Ctrl-f` to open the dialog:
 

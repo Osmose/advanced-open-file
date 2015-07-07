@@ -172,16 +172,17 @@ class AdvancedFileView extends View
       else
         atom.beep()
 
-  updatePath: (newPath) ->
+  updatePath: (newPath, oldPath=null) ->
+    @pathHistory.push oldPath or @miniEditor.getText()
     @miniEditor.setText newPath
 
   update: ->
     if atom.config.get 'advanced-open-file.helmDirSwitch'
       text = @miniEditor.getText()
-      if text.endsWith(path.sep + path.sep)
-        @updatePath @FS_ROOT
-      else if text.endsWith(path.sep + '~' + path.sep)
-        @updatePath osenv.home() + path.sep
+      if text.endsWith path.sep + path.sep
+        @updatePath @FS_ROOT, text[...-1]
+      else if text.endsWith path.sep + '~' + path.sep
+        @updatePath osenv.home() + path.sep, text[...-2]
 
     @getFileList (files) ->
       @renderAutocompleteList files
@@ -249,6 +250,7 @@ class AdvancedFileView extends View
   attach: ->
     @suggestPath()
     @previouslyFocusedElement = $(':focus')
+    @pathHistory = []
     @panel = atom.workspace.addModalPanel(item: this)
 
     @parent('.modal').css({
@@ -270,8 +272,16 @@ class AdvancedFileView extends View
 
     # Handle keyboard movement
     @miniEditor.on 'keydown', (ev) =>
-      if ev.keyCode is 9
+      if ev.keyCode is 9 # Tab
         blockEvent ev
+        return
+
+      if ev.keyCode is 90 and (ev.ctrlKey or ev.metaKey) # Ctrl/Cmd + Z
+        blockEvent ev
+        if @pathHistory.length > 0
+          @miniEditor.setText @pathHistory.pop()
+        else
+          atom.beep()
         return
 
       selected = @find('.list-item.selected')
@@ -280,19 +290,20 @@ class AdvancedFileView extends View
         @selectItem selected
         return
 
-      if ev.keyCode is 40 # Down
-        blockEvent ev
-        selected = selected.next()
-        if selected.length < 1
-          selected = @find('.list-item:first')
-      else if ev.keyCode is 38 # Up
-        blockEvent ev
-        selected = selected.prev()
-        if selected.length < 1
-          selected = @find('.list-item:last')
+      if ev.keyCode is 40 or ev.keyCode is 38
+        if ev.keyCode is 40 # Down
+          blockEvent ev
+          selected = selected.next()
+          if selected.length < 1
+            selected = @find('.list-item:first')
+        else if ev.keyCode is 38 # Up
+          blockEvent ev
+          selected = selected.prev()
+          if selected.length < 1
+            selected = @find('.list-item:last')
 
-      @find('.list-item').removeClass('selected')
-      selected.addClass('selected')
+        @find('.list-item').removeClass('selected')
+        selected.addClass('selected')
 
     # Handle the Tab completion
     @keyUpListener = @miniEditor.on 'keyup', (ev) =>

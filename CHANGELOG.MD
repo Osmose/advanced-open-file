@@ -2,6 +2,7 @@
 ==============
 
 * Add option for Helm-style fast directory switching.
+* Add ability to undo changes to the autocomplete field using Ctrl/Cmd-Z.
 * Fix bug where clicking the icon or path in a list item would beep and
   fail instead of selecting the clicked list item.
 
