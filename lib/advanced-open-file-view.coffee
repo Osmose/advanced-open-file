@@ -79,7 +79,7 @@ class AdvancedFileView extends View
     @directoryListView.on 'click', '.list-item', (ev) => @clickItem(ev)
 
   clickItem: (ev) ->
-    listItem = $(ev.target)
+    listItem = $(ev.currentTarget)
     @selectItem listItem
     @miniEditor.focus()
 

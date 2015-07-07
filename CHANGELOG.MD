@@ -1,11 +1,13 @@
-0.7.3 (July 3 2015)
-===================
+0.7.3 (master)
+==============
 
 * Add option for Helm-style fast directory switching.
+* Fix bug where clicking the icon or path in a list item would beep and
+  fail instead of selecting the clicked list item.
 
 
 0.7.2 (June 17 2015)
-===================
+====================
 
 * Default to project root when showing dialog while no tab is active.
 
