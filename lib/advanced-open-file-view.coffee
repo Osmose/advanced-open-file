@@ -182,7 +182,10 @@ class AdvancedFileView extends View
       if text.endsWith path.sep + path.sep
         @updatePath @FS_ROOT, text[...-1]
       else if text.endsWith path.sep + '~' + path.sep
-        @updatePath osenv.home() + path.sep, text[...-2]
+          try # Make sure ~ doesn't exist in the current directory.
+            fs.statSync @inputPath()
+          catch # It doesn't, do the shortcut!
+            @updatePath osenv.home() + path.sep, text[...-2]
 
     @getFileList (files) ->
       @renderAutocompleteList files
