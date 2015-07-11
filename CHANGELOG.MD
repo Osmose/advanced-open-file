@@ -1,10 +1,12 @@
-0.7.3 (master)
+0.8.0 (master)
 ==============
 
 * Add option for Helm-style fast directory switching.
 * Add ability to undo changes to the autocomplete field using Ctrl/Cmd-Z.
 * Fix bug where clicking the icon or path in a list item would beep and
   fail instead of selecting the clicked list item.
+* Fix bug where entering a directory named ~ was impossible with fast directory
+  switching enabled.
 
 
 0.7.2 (June 17 2015)
