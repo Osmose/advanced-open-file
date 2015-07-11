@@ -1,5 +1,5 @@
-0.8.0 (master)
-==============
+0.8.0 (July 11 2015)
+====================
 
 * Add option for Helm-style fast directory switching.
 * Add ability to undo changes to the autocomplete field using Ctrl/Cmd-Z.
