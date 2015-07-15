@@ -269,6 +269,7 @@ class AdvancedFileView extends View
     $('html').on 'click', @outsideClickHandler
 
     @miniEditor.focus()
+    @miniEditor.getModel().setCursorScreenPosition [0, 10000], autoscroll: true
 
     # Populate the directory listing live
     @miniEditor.getModel().onDidChange => @update()

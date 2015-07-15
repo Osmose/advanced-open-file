@@ -1,3 +1,9 @@
+0.8.1 (July 14 2015)
+====================
+
+* Scroll to the end of the search box on attach in case the path is super long.
+
+
 0.8.0 (July 11 2015)
 ====================
 
