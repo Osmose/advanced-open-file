@@ -16,7 +16,7 @@ class DirectoryListView extends ScrollView
   @content: ->
     @ul class: 'list-group', outlet: 'directoryList'
 
-  renderFiles: (files, hasParent) ->
+  renderFiles: (files, hasParent, showOpenAsProjectFolder) ->
     @empty()
 
     # Parent directory
@@ -29,7 +29,10 @@ class DirectoryListView extends ScrollView
       icon = if file.isDir then 'icon-file-directory' else 'icon-file-text'
       @append $$ ->
         @li class: "list-item #{'directory' if file.isDir}", =>
-          @span class: "icon #{icon}", 'data-name': path.basename(file.name), file.name
+          @span class: "filename icon #{icon}", 'data-name': path.basename(file.name), file.name
+          if showOpenAsProjectFolder and file.isDir then @span
+            class: 'add-project-folder icon icon-plus',
+            title: 'Open as project folder'
 
 
 module.exports =
@@ -64,7 +67,10 @@ class AdvancedFileView extends View
 
   @content: (params) ->
     @div class: 'advanced-open-file', =>
-      @p outlet:'message', class:'icon icon-file-add', "Enter the path for the file/directory. Directories end with a '" + path.sep + "'."
+      @p
+        outlet: 'message',
+        class: 'icon icon-file-add',
+        "Enter the path for the file/directory. Directories end with a '#{path.sep}'."
       @subview 'miniEditor', new TextEditorView({mini:true})
       @subview 'directoryListView', new DirectoryListView()
 
@@ -77,6 +83,7 @@ class AdvancedFileView extends View
       'core:confirm': => @confirm()
       'core:cancel': => @detach()
     @directoryListView.on 'click', '.list-item', (ev) => @clickItem(ev)
+    @directoryListView.on 'click', '.add-project-folder', (ev) => @addProjectFolder(ev)
 
   clickItem: (ev) ->
     listItem = $(ev.currentTarget)
@@ -93,6 +100,12 @@ class AdvancedFileView extends View
         @confirm newPath
       else
         @updatePath newPath + path.sep
+
+  addProjectFolder: (ev) ->
+    listItem = $(ev.currentTarget).parent('.list-item')
+    folderPath = path.join @inputPath(), listItem.text()
+    atom.project.addPath(folderPath)
+    @detach()
 
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
@@ -177,6 +190,9 @@ class AdvancedFileView extends View
     @miniEditor.setText newPath
 
   update: ->
+    if @detaching
+      return
+
     if atom.config.get 'advanced-open-file.helmDirSwitch'
       text = @miniEditor.getText()
       if text.endsWith path.sep + path.sep
@@ -201,12 +217,19 @@ class AdvancedFileView extends View
       + ' icon-file-directory-create'\
       + ' icon-alert'
     if icon? then @message.addClass 'icon icon-' + icon
-    @message.text str or "Enter the path for the file/directory. Directories end with a '" + path.sep + "'."
+    @message.text str or "
+      Enter the path for the file/directory. Directories end with a '#{path.sep}'.
+    "
 
   # Renders the list of directories
   renderAutocompleteList: (files) ->
+    inputPath = @inputPath()
+    withinProjectFolder = atom.project.contains(inputPath)
+    isProjectFolder = inputPath in atom.project.getPaths()
+    showOpenAsProjectFolder = not withinProjectFolder and not isProjectFolder
+
     input = @getLastSearchedFile()
-    @directoryListView.renderFiles files, input and input != @FS_ROOT
+    @directoryListView.renderFiles files, input and input != @FS_ROOT, showOpenAsProjectFolder
 
   confirm: (pathToConfirm) ->
     inputPath = pathToConfirm or @miniEditor.getText()

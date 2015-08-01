@@ -2,6 +2,9 @@
 ===============
 
 * Make icons in dropdown compatible with the file-icons package. SUCH FANCY
+* Add icon to directories entries that, when clicked, adds them as project
+  directories.
+
 
 0.8.1 (July 14 2015)
 ====================

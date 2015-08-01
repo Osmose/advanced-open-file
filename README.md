@@ -25,6 +25,9 @@ You can also click on any entry in the file list to add it to the current path
 You can also use the `Up` and `Down` arrow keys to scroll through the list, and
 `Enter` to select the currently-highlighted item.
 
+If a directory has a plus symbol on the right side of its entry, clicking the
+symbol will add it as a project directory.
+
 `Cmd-Z`/`Ctrl-Z` will undo changes made to the current path, such as
 autocompletion or directory shortcuts.
 

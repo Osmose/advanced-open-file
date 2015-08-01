@@ -8,8 +8,20 @@
     }
 
     .list-item {
-        span {
-            margin: 0 4px;
+        padding: 0 @component-padding;
+
+        .add-project-folder {
+            float: right;
+            color: @text-color-subtle;
+
+            &:hover {
+                color: @text-color-highlight;
+                cursor: pointer;
+            }
+        }
+
+        .filename {
+            margin: 0;
         }
 
         .selected {
