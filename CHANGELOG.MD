@@ -1,3 +1,8 @@
+0.8.2 (Pending)
+===============
+
+* Make icons in dropdown compatible with the file-icons package. SUCH FANCY
+
 0.8.1 (July 14 2015)
 ====================
 

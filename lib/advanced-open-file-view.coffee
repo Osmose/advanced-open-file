@@ -29,7 +29,7 @@ class DirectoryListView extends ScrollView
       icon = if file.isDir then 'icon-file-directory' else 'icon-file-text'
       @append $$ ->
         @li class: "list-item #{'directory' if file.isDir}", =>
-          @span class: "icon #{icon}", file.name
+          @span class: "icon #{icon}", 'data-name': path.basename(file.name), file.name
 
 
 module.exports =
