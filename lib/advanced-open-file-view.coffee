@@ -1,10 +1,10 @@
-{$, $$, View, TextEditorView, ScrollView} = require 'atom-space-pen-views'
-fs = require 'fs'
-os = require 'os'
-osenv = require 'osenv'
-path = require 'path'
-mkdirp = require 'mkdirp'
-touch = require 'touch'
+{$, $$, View, TextEditorView, ScrollView} = require "atom-space-pen-views"
+fs = require "fs"
+os = require "os"
+osenv = require "osenv"
+path = require "path"
+mkdirp = require "mkdirp"
+touch = require "touch"
 
 
 blockEvent = (ev) ->
@@ -14,7 +14,7 @@ blockEvent = (ev) ->
 
 class DirectoryListView extends ScrollView
   @content: ->
-    @ul class: 'list-group', outlet: 'directoryList'
+    @ul class: "list-group", outlet: "directoryList"
 
   renderFiles: (files, hasParent, showOpenAsProjectFolder) ->
     @empty()
@@ -22,17 +22,17 @@ class DirectoryListView extends ScrollView
     # Parent directory
     if hasParent
       @append $$ ->
-        @li class: 'list-item parent-directory', =>
-          @span class: 'icon icon-file-directory', '..'
+        @li class: "list-item parent-directory", =>
+          @span class: "icon icon-file-directory", ".."
 
     files?.forEach (file) =>
-      icon = if file.isDir then 'icon-file-directory' else 'icon-file-text'
+      icon = if file.isDir then "icon-file-directory" else "icon-file-text"
       @append $$ ->
         @li class: "list-item #{'directory' if file.isDir}", =>
-          @span class: "filename icon #{icon}", 'data-name': path.basename(file.name), file.name
+          @span class: "filename icon #{icon}", "data-name": path.basename(file.name), file.name
           if showOpenAsProjectFolder and file.isDir then @span
-            class: 'add-project-folder icon icon-plus',
-            title: 'Open as project folder'
+            class: "add-project-folder icon icon-plus",
+            title: "Open as project folder"
 
 
 module.exports =
@@ -44,19 +44,19 @@ class AdvancedFileView extends View
 
   @config:
     caseSensitiveAutoCompletion:
-      title: 'Case-sensitive auto-completion'
-      type: 'boolean'
+      title: "Case-sensitive auto-completion"
+      type: "boolean"
       default: false
     createFileInstantly:
-      title: 'Create files instantly'
-      description: 'When opening files that don\'t exist, create them
-                    immediately instead of on save.'
-      type: 'boolean'
+      title: "Create files instantly"
+      description: "When opening files that don't exist, create them
+                    immediately instead of on save."
+      type: "boolean"
       default: false
     helmDirSwitch:
-      title: 'Helm-style fast directory switching'
-      description: 'See README for details.'
-      type: 'boolean'
+      title: "Helm-style fast directory switching"
+      description: "See README for details."
+      type: "boolean"
       default: false
 
   @activate: (state) ->
@@ -66,24 +66,24 @@ class AdvancedFileView extends View
     @advancedFileView.detach()
 
   @content: (params) ->
-    @div class: 'advanced-open-file', =>
+    @div class: "advanced-open-file", =>
       @p
-        outlet: 'message',
-        class: 'icon icon-file-add',
-        "Enter the path for the file/directory. Directories end with a '#{path.sep}'."
-      @subview 'miniEditor', new TextEditorView({mini:true})
-      @subview 'directoryListView', new DirectoryListView()
+        outlet: "message",
+        class: "icon icon-file-add",
+        "Enter the path for the file/directory. Directories end with a "#{path.sep}"."
+      @subview "miniEditor", new TextEditorView({mini:true})
+      @subview "directoryListView", new DirectoryListView()
 
   @detaching: false,
 
   initialize: (serializeState) ->
-    atom.commands.add 'atom-workspace', 'advanced-open-file:toggle', => @toggle()
-    @miniEditor.getModel().setPlaceholderText(path.join('path','to','file.txt'));
+    atom.commands.add "atom-workspace", "advanced-open-file:toggle", => @toggle()
+    @miniEditor.getModel().setPlaceholderText(path.join("path","to","file.txt"));
     atom.commands.add @element,
-      'core:confirm': => @confirm()
-      'core:cancel': => @detach()
-    @directoryListView.on 'click', '.list-item', (ev) => @clickItem(ev)
-    @directoryListView.on 'click', '.add-project-folder', (ev) => @addProjectFolder(ev)
+      "core:confirm": => @confirm()
+      "core:cancel": => @detach()
+    @directoryListView.on "click", ".list-item", (ev) => @clickItem(ev)
+    @directoryListView.on "click", ".add-project-folder", (ev) => @addProjectFolder(ev)
 
   clickItem: (ev) ->
     listItem = $(ev.currentTarget)
@@ -91,18 +91,18 @@ class AdvancedFileView extends View
     @miniEditor.focus()
 
   selectItem: (listItem) ->
-    if listItem.hasClass 'parent-directory'
+    if listItem.hasClass "parent-directory"
       newPath = path.dirname(@inputPath())
-      @updatePath newPath + (if newPath != @FS_ROOT then path.sep else '')
+      @updatePath newPath + (if newPath != @FS_ROOT then path.sep else "")
     else
       newPath = path.join @inputPath(), listItem.text()
-      if not listItem.hasClass 'directory'
+      if not listItem.hasClass "directory"
         @confirm newPath
       else
         @updatePath newPath + path.sep
 
   addProjectFolder: (ev) ->
-    listItem = $(ev.currentTarget).parent('.list-item')
+    listItem = $(ev.currentTarget).parent(".list-item")
     folderPath = path.join @inputPath(), listItem.text()
     atom.project.addPath(folderPath)
     @detach()
@@ -110,7 +110,7 @@ class AdvancedFileView extends View
   # Retrieves the reference directory for the relative paths
   referenceDir: () ->
     atom.project.getPaths()[0] or osenv.home()
-    '/'
+    "/"
 
   # Resolves the path being inputted in the dialog, up to the last slash
   inputPath: () ->
@@ -132,7 +132,7 @@ class AdvancedFileView extends View
     input = @getLastSearchedFile()
     fs.stat @inputPath(), (err, stat) =>
 
-      if err?.code is 'ENOENT'
+      if err?.code is "ENOENT"
         return []
 
       fs.readdir @inputPath(), (err, files) =>
@@ -141,7 +141,7 @@ class AdvancedFileView extends View
 
         files.forEach (filename) =>
           fragment = input.substr(input.lastIndexOf(path.sep) + 1, input.length)
-          caseSensitive = atom.config.get 'advanced-open-file.caseSensitiveAutoCompletion'
+          caseSensitive = atom.config.get "advanced-open-file.caseSensitiveAutoCompletion"
 
           if not caseSensitive
             fragment = fragment.toLowerCase()
@@ -171,7 +171,7 @@ class AdvancedFileView extends View
       if files?.length is 1
         newPath = path.join(@inputPath(), files[0].name)
 
-        suffix = if files[0].isDir then path.sep else ''
+        suffix = if files[0].isDir then path.sep else ""
         @updatePath(newPath + suffix)
 
       else if files?.length > 1
@@ -193,11 +193,11 @@ class AdvancedFileView extends View
     if @detaching
       return
 
-    if atom.config.get 'advanced-open-file.helmDirSwitch'
+    if atom.config.get "advanced-open-file.helmDirSwitch"
       text = @miniEditor.getText()
       if text.endsWith path.sep + path.sep
         @updatePath @FS_ROOT, text[...-1]
-      else if text.endsWith path.sep + '~' + path.sep
+      else if text.endsWith path.sep + "~" + path.sep
           try # Make sure ~ doesn't exist in the current directory.
             fs.statSync @inputPath()
           catch # It doesn't, do the shortcut!
@@ -207,16 +207,16 @@ class AdvancedFileView extends View
       @renderAutocompleteList files
 
     if /\/$/.test @miniEditor.getText()
-      @setMessage 'file-directory-create'
+      @setMessage "file-directory-create"
     else
-      @setMessage 'file-add'
+      @setMessage "file-add"
 
   setMessage: (icon, str) ->
-    @message.removeClass 'icon'\
-      + ' icon-file-add'\
-      + ' icon-file-directory-create'\
-      + ' icon-alert'
-    if icon? then @message.addClass 'icon icon-' + icon
+    @message.removeClass "icon"\
+      + " icon-file-add"\
+      + " icon-file-directory-create"\
+      + " icon-alert"
+    if icon? then @message.addClass "icon icon-" + icon
     @message.text str or "
       Enter the path for the file/directory. Directories end with a '#{path.sep}'.
     "
@@ -249,21 +249,21 @@ class AdvancedFileView extends View
           if /\/$/.test(pathToCreate)
             mkdirp pathToCreate
           else
-            if atom.config.get 'advanced-open-file.createFileInstantly'
+            if atom.config.get "advanced-open-file.createFileInstantly"
               mkdirp createWithin unless fs.existsSync(createWithin) and fs.statSync(createWithin)
               touch pathToCreate
             atom.workspace.open pathToCreate
         catch error
-          @setMessage 'alert', error.message
+          @setMessage "alert", error.message
 
       @detach()
 
   detach: ->
-    $('html').off('click', @outsideClickHandler) unless not @outsideClickHandler
+    $("html").off("click", @outsideClickHandler) unless not @outsideClickHandler
     @outsideClickHandler = null
     return unless @hasParent()
     @detaching = true
-    @miniEditor.setText ''
+    @miniEditor.setText ""
     @setMessage()
     @directoryListView.empty()
     miniEditorFocused = @miniEditor.hasFocus()
@@ -275,21 +275,21 @@ class AdvancedFileView extends View
 
   attach: ->
     @suggestPath()
-    @previouslyFocusedElement = $(':focus')
+    @previouslyFocusedElement = $(":focus")
     @pathHistory = []
     @panel = atom.workspace.addModalPanel(item: this)
 
-    @parent('.modal').css({
-      'max-height': '100%',
-      display: 'flex',
-      'flex-direction': 'column',
+    @parent(".modal").css({
+      "max-height": "100%",
+      display: "flex",
+      "flex-direction": "column",
     })
 
     # Detach when clicked outside.
     @outsideClickHandler = (ev) =>
-      if not $(ev.target).closest('.advanced-open-file').length
+      if not $(ev.target).closest(".advanced-open-file").length
         @detach()
-    $('html').on 'click', @outsideClickHandler
+    $("html").on "click", @outsideClickHandler
 
     @miniEditor.focus()
     @miniEditor.getModel().setCursorScreenPosition [0, 10000], autoscroll: true
@@ -298,7 +298,7 @@ class AdvancedFileView extends View
     @miniEditor.getModel().onDidChange => @update()
 
     # Handle keyboard movement
-    @miniEditor.on 'keydown', (ev) =>
+    @miniEditor.on "keydown", (ev) =>
       if ev.keyCode is 9 # Tab
         blockEvent ev
         return
@@ -311,7 +311,7 @@ class AdvancedFileView extends View
           atom.beep()
         return
 
-      selected = @find('.list-item.selected')
+      selected = @find(".list-item.selected")
       if ev.keyCode is 13 and selected.length > 0 # Enter
         blockEvent ev
         @selectItem selected
@@ -322,18 +322,18 @@ class AdvancedFileView extends View
           blockEvent ev
           selected = selected.next()
           if selected.length < 1
-            selected = @find('.list-item:first')
+            selected = @find(".list-item:first")
         else if ev.keyCode is 38 # Up
           blockEvent ev
           selected = selected.prev()
           if selected.length < 1
-            selected = @find('.list-item:last')
+            selected = @find(".list-item:last")
 
-        @find('.list-item').removeClass('selected')
-        selected.addClass('selected')
+        @find(".list-item").removeClass("selected")
+        selected.addClass("selected")
 
     # Handle the Tab completion
-    @keyUpListener = @miniEditor.on 'keyup', (ev) =>
+    @keyUpListener = @miniEditor.on "keyup", (ev) =>
       if ev.keyCode is 9
         ev.preventDefault()
         ev.stopPropagation()
