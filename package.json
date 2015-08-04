@@ -1,7 +1,7 @@
 {
   "name": "advanced-open-file",
   "main": "./lib/advanced-open-file-view",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Fork of Advanced New File. Create and open multiple files and directories by typing a relative path.",
   "activationCommands": {
     "atom-workspace": [
