@@ -332,6 +332,38 @@ class AdvancedFileView extends View
         @find(".list-item").removeClass("selected")
         selected.addClass("selected")
 
+        # emacs 'ctrl-n' for next 'ctrl-p' for previous
+        if (ev.keyCode is 78 or ev.keyCode is 80) and (ev.ctrlKey or ev.metaKey)
+          if ev.keyCode is 78 # ctrl+n => Down
+            blockEvent ev
+            selected = selected.next()
+            if selected.length < 1
+              selected = @find(".list-item:first")
+          else if ev.keyCode is 80 # ctrl+p => Up
+            blockEvent ev
+            selected = selected.prev()
+            if selected.length < 1
+              selected = @find(".list-item:last")
+
+          @find(".list-item").removeClass("selected")
+          selected.addClass("selected")
+
+        # popular 'ctrl-i' for UP and 'ctrl-k' for DOWN
+        if (ev.keyCode is 73 or ev.keyCode is 75) and (ev.ctrlKey or ev.metaKey)
+          if ev.keyCode is 75 # ctrl+k => Down
+            blockEvent ev
+            selected = selected.next()
+            if selected.length < 1
+              selected = @find(".list-item:first")
+          else if ev.keyCode is 73 # 'ctrl+i' => up
+            blockEvent ev
+            selected = selected.prev()
+            if selected.length < 1
+              selected = @find(".list-item:last")
+
+          @find(".list-item").removeClass("selected")
+          selected.addClass("selected")
+
     # Handle the Tab completion
     @keyUpListener = @miniEditor.on "keyup", (ev) =>
       if ev.keyCode is 9
