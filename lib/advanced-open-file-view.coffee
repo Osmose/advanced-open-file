@@ -7,11 +7,6 @@ mkdirp = require "mkdirp"
 touch = require "touch"
 
 
-blockEvent = (ev) ->
-  ev.preventDefault()
-  ev.stopPropagation()
-
-
 class DirectoryListView extends ScrollView
   @content: ->
     @ul class: "list-group", outlet: "directoryList"
@@ -40,7 +35,6 @@ class AdvancedFileView extends View
   PATH_SEPARATOR: ","
   FS_ROOT: if os.platform == "win32" then process.cwd().split(path.sep)[0] else "/"
   advancedFileView: null
-  keyUpListener: null
 
   @config:
     caseSensitiveAutoCompletion:
@@ -77,13 +71,19 @@ class AdvancedFileView extends View
   @detaching: false,
 
   initialize: (serializeState) ->
-    atom.commands.add "atom-workspace", "advanced-open-file:toggle", => @toggle()
-    @miniEditor.getModel().setPlaceholderText(path.join("path","to","file.txt"));
+    atom.commands.add "atom-workspace",
+      "advanced-open-file:toggle": => @toggle()
     atom.commands.add @element,
       "core:confirm": => @confirm()
       "core:cancel": => @detach()
+      "advanced-open-file:autocomplete": => @autocomplete()
+      "advanced-open-file:undo": => @undo()
+      "advanced-open-file:move-cursor-down": => @moveCursorDown()
+      "advanced-open-file:move-cursor-up": => @moveCursorUp()
     @directoryListView.on "click", ".list-item", (ev) => @clickItem(ev)
     @directoryListView.on "click", ".add-project-folder", (ev) => @addProjectFolder(ev)
+
+    @miniEditor.getModel().setPlaceholderText(path.join("path","to","file.txt"));
 
   clickItem: (ev) ->
     listItem = $(ev.currentTarget)
@@ -97,7 +97,7 @@ class AdvancedFileView extends View
     else
       newPath = path.join @inputPath(), listItem.text()
       if not listItem.hasClass "directory"
-        @confirm newPath
+        @openOrCreate(newPath)
       else
         @updatePath newPath + path.sep
 
@@ -162,11 +162,12 @@ class AdvancedFileView extends View
 
 
   # Called only when pressing Tab to trigger auto-completion
-  autocomplete: (str) ->
+  autocomplete: ->
+    pathToComplete = @getLastSearchedFile()
     @getFileList (files) ->
-      newString = str
+      newString = pathToComplete
       oldInputText = @miniEditor.getText()
-      indexOfString = oldInputText.lastIndexOf(str)
+      indexOfString = oldInputText.lastIndexOf(pathToComplete)
       textWithoutSuggestion = oldInputText.substring(0, indexOfString)
       if files?.length is 1
         newPath = path.join(@inputPath(), files[0].name)
@@ -231,8 +232,14 @@ class AdvancedFileView extends View
     input = @getLastSearchedFile()
     @directoryListView.renderFiles files, input and input != @FS_ROOT, showOpenAsProjectFolder
 
-  confirm: (pathToConfirm) ->
-    inputPath = pathToConfirm or @miniEditor.getText()
+  confirm: ->
+    selected = @find(".list-item.selected")
+    if selected.length > 0
+      @selectItem(selected)
+    else
+      @openOrCreate(@miniEditor.getText())
+
+  openOrCreate: (inputPath) ->
     if fs.existsSync(inputPath)
       if fs.statSync(inputPath).isFile()
         atom.workspace.open inputPath
@@ -258,6 +265,28 @@ class AdvancedFileView extends View
 
       @detach()
 
+  undo: ->
+    if @pathHistory.length > 0
+      @miniEditor.setText @pathHistory.pop()
+    else
+      atom.beep()
+
+  moveCursorDown: ->
+    selected = @find(".list-item.selected").next()
+    if selected.length < 1
+      selected = @find(".list-item:first")
+    @moveCursorTo(selected)
+
+  moveCursorUp: ->
+    selected = @find(".list-item.selected").prev()
+    if selected.length < 1
+      selected = @find(".list-item:last")
+    @moveCursorTo(selected)
+
+  moveCursorTo: (selectedElement) ->
+    @find(".list-item").removeClass("selected")
+    selectedElement.addClass("selected")
+
   detach: ->
     $("html").off("click", @outsideClickHandler) unless not @outsideClickHandler
     @outsideClickHandler = null
@@ -267,7 +296,6 @@ class AdvancedFileView extends View
     @setMessage()
     @directoryListView.empty()
     miniEditorFocused = @miniEditor.hasFocus()
-    @keyUpListener.off()
     super
     @panel?.destroy()
     @restoreFocus() if miniEditorFocused
@@ -296,49 +324,6 @@ class AdvancedFileView extends View
 
     # Populate the directory listing live
     @miniEditor.getModel().onDidChange => @update()
-
-    # Handle keyboard movement
-    @miniEditor.on "keydown", (ev) =>
-      if ev.keyCode is 9 # Tab
-        blockEvent ev
-        return
-
-      if ev.keyCode is 90 and (ev.ctrlKey or ev.metaKey) # Ctrl/Cmd + Z
-        blockEvent ev
-        if @pathHistory.length > 0
-          @miniEditor.setText @pathHistory.pop()
-        else
-          atom.beep()
-        return
-
-      selected = @find(".list-item.selected")
-      if ev.keyCode is 13 and selected.length > 0 # Enter
-        blockEvent ev
-        @selectItem selected
-        return
-
-      if ev.keyCode is 40 or ev.keyCode is 38
-        if ev.keyCode is 40 # Down
-          blockEvent ev
-          selected = selected.next()
-          if selected.length < 1
-            selected = @find(".list-item:first")
-        else if ev.keyCode is 38 # Up
-          blockEvent ev
-          selected = selected.prev()
-          if selected.length < 1
-            selected = @find(".list-item:last")
-
-        @find(".list-item").removeClass("selected")
-        selected.addClass("selected")
-
-    # Handle the Tab completion
-    @keyUpListener = @miniEditor.on "keyup", (ev) =>
-      if ev.keyCode is 9
-        ev.preventDefault()
-        ev.stopPropagation()
-        pathToComplete = @getLastSearchedFile()
-        @autocomplete pathToComplete
 
     @miniEditor.focus()
     @getFileList (files) -> @renderAutocompleteList files

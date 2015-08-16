@@ -31,12 +31,44 @@ symbol will add it as a project directory.
 `Cmd-Z`/`Ctrl-Z` will undo changes made to the current path, such as
 autocompletion or directory shortcuts.
 
-You can also remap the command to any key you want. For example, add the
-following to your keymap to map `Ctrl-x Ctrl-f` to open the dialog:
+## Keybindings
+
+Available commands for binding:
+
+<dl>
+  <dt>`advanced-open-file:toggle`</dt>
+  <dd>Toggles the Advanced Open File dialog.</dd>
+
+  <dt>`advanced-open-file:autocomplete`</dt>
+  <dd>Attempts to autocomplete the current input.</dd>
+
+  <dt>`advanced-open-file:undo`</dt>
+  <dd>Undo changes to the current path.</dd>
+
+  <dt>`advanced-open-file:move-cursor-up`</dt>
+  <dd>Move the cursor/highlight for the currently selected file up.</dd>
+
+  <dt>`advanced-open-file:move-cursor-down`</dt>
+  <dd>Move the cursor/highlight for the currently selected file down.</dd>
+</dl>
+
+The following extra keybindings are included by default:
+
+Action                                | Extra Keys
+------------------------------------- | ------------------
+`advanced-open-file:move-cursor-up`   | `Ctrl-p`, `Ctrl-i`
+`advanced-open-file:move-cursor-down` | `Ctrl-n`, `Ctrl-k`
+
+You can of course remap the keys however you wish. For example, add the
+following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
+`Ctrl-j` to move the cursor down:
 
 ```cson
 'atom-workspace':
   'ctrl-x ctrl-f': 'advanced-open-file:toggle'
+
+'.advanced-open-file atom-text-editor':
+  'ctrl-j': 'advanced-open-file:move-cursor-down'
 ```
 
 ## Settings:

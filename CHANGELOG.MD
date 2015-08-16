@@ -1,3 +1,11 @@
+0.8.3 (Pending)
+===============
+
+* Add `Ctrl-p`/`Ctrl-n` and `Ctrl-i`/`Ctrl-k` as alternative keybindings
+  for moving through the file list, and use commands for all keybindings
+  to make customization easier.
+
+
 0.8.2 (August 3 2015)
 =====================
 

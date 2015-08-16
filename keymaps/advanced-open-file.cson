@@ -12,3 +12,22 @@
 
 '.platform-win32 atom-workspace, .platform-linux atom-workspace':
   'ctrl-alt-o': 'advanced-open-file:toggle'
+
+'.advanced-open-file atom-text-editor':
+  'tab': 'advanced-open-file:autocomplete'
+  'up': 'advanced-open-file:move-cursor-up'
+  'down': 'advanced-open-file:move-cursor-down'
+
+  # Emacs-style movement
+  'ctrl-p': 'advanced-open-file:move-cursor-up'
+  'ctrl-n': 'advanced-open-file:move-cursor-down'
+
+  # Alternative movement keys
+  'ctrl-i': 'advanced-open-file:move-cursor-up'
+  'ctrl-k': 'advanced-open-file:move-cursor-down'
+
+'.platform-darwin .advanced-open-file atom-text-editor':
+  'cmd-z': 'advanced-open-file:undo'
+
+'.platform-win32 .advanced-open-file atom-text-editor, .platform-linux .advanced-open-file atom-text-editor':
+  'ctrl-z': 'advanced-open-file:undo'
