@@ -7,6 +7,19 @@ mkdirp = require "mkdirp"
 touch = require "touch"
 
 
+# Find filesystem root for the given path by calling path.dirname
+# until it returns the same value as its input.
+getRoot = (inputPath) ->
+  lastPath = null
+  while inputPath != lastPath
+    lastPath = inputPath
+    inputPath = path.dirname(inputPath)
+  return inputPath
+
+isRoot = (inputPath) ->
+  return path.dirname(inputPath) is inputPath
+
+
 class DirectoryListView extends ScrollView
   @content: ->
     @ul class: "list-group", outlet: "directoryList"
@@ -32,8 +45,6 @@ class DirectoryListView extends ScrollView
 
 module.exports =
 class AdvancedFileView extends View
-  PATH_SEPARATOR: ","
-  FS_ROOT: if os.platform == "win32" then process.cwd().split(path.sep)[0] else "/"
   advancedFileView: null
 
   @config:
@@ -93,7 +104,7 @@ class AdvancedFileView extends View
   selectItem: (listItem) ->
     if listItem.hasClass "parent-directory"
       newPath = path.dirname(@inputPath())
-      @updatePath newPath + (if newPath != @FS_ROOT then path.sep else "")
+      @updatePath newPath + path.sep
     else
       newPath = path.join @inputPath(), listItem.text()
       if not listItem.hasClass "directory"
@@ -107,31 +118,19 @@ class AdvancedFileView extends View
     atom.project.addPath(folderPath)
     @detach()
 
-  # Retrieves the reference directory for the relative paths
-  referenceDir: () ->
-    atom.project.getPaths()[0] or osenv.home()
-    "/"
-
   # Resolves the path being inputted in the dialog, up to the last slash
   inputPath: () ->
-    input = @getLastSearchedFile()
-    path.join @referenceDir(), input.substr(0, input.lastIndexOf(path.sep))
-
-  inputFullPath: () ->
-    input = @getLastSearchedFile()
-    path.join @referenceDir(), input
-
-  getLastSearchedFile: () ->
     input = @miniEditor.getText()
-    commonIndex = input.lastIndexOf(@PATH_SEPARATOR) + 1
-    input.substring(commonIndex, input.length)
+    if input.endsWith(path.sep)
+      return input
+    else
+      return path.dirname(input)
 
 
   # Returns the list of directories matching the current input (path and autocomplete fragment)
   getFileList: (callback) ->
-    input = @getLastSearchedFile()
+    input = @miniEditor.getText()
     fs.stat @inputPath(), (err, stat) =>
-
       if err?.code is "ENOENT"
         return []
 
@@ -163,7 +162,7 @@ class AdvancedFileView extends View
 
   # Called only when pressing Tab to trigger auto-completion
   autocomplete: ->
-    pathToComplete = @getLastSearchedFile()
+    pathToComplete = @inputPath()
     @getFileList (files) ->
       newString = pathToComplete
       oldInputText = @miniEditor.getText()
@@ -179,7 +178,7 @@ class AdvancedFileView extends View
         longestPrefix = @longestCommonPrefix((file.name for file in files))
         newPath = path.join(@inputPath(), longestPrefix)
 
-        if (newPath.length > @inputFullPath().length)
+        if (newPath.length > @inputPath().length)
           @updatePath(newPath)
         else
           atom.beep()
@@ -188,7 +187,7 @@ class AdvancedFileView extends View
 
   updatePath: (newPath, oldPath=null) ->
     @pathHistory.push oldPath or @miniEditor.getText()
-    @miniEditor.setText newPath
+    @miniEditor.setText path.normalize(newPath)
 
   update: ->
     if @detaching
@@ -197,7 +196,7 @@ class AdvancedFileView extends View
     if atom.config.get "advanced-open-file.helmDirSwitch"
       text = @miniEditor.getText()
       if text.endsWith path.sep + path.sep
-        @updatePath @FS_ROOT, text[...-1]
+        @updatePath getRoot(text), text[...-1]
       else if text.endsWith path.sep + "~" + path.sep
           try # Make sure ~ doesn't exist in the current directory.
             fs.statSync @inputPath()
@@ -207,7 +206,7 @@ class AdvancedFileView extends View
     @getFileList (files) ->
       @renderAutocompleteList files
 
-    if /\/$/.test @miniEditor.getText()
+    if @miniEditor.getText().endsWith(path.sep)
       @setMessage "file-directory-create"
     else
       @setMessage "file-add"
@@ -229,8 +228,8 @@ class AdvancedFileView extends View
     isProjectFolder = inputPath in atom.project.getPaths()
     showOpenAsProjectFolder = not withinProjectFolder and not isProjectFolder
 
-    input = @getLastSearchedFile()
-    @directoryListView.renderFiles files, input and input != @FS_ROOT, showOpenAsProjectFolder
+    input = @inputPath()
+    @directoryListView.renderFiles files, input and not isRoot(input), showOpenAsProjectFolder
 
   confirm: ->
     selected = @find(".list-item.selected")
@@ -247,23 +246,18 @@ class AdvancedFileView extends View
       else
         atom.beep()
     else
-      relativePaths = inputPath.split(@PATH_SEPARATOR)
-
-      for relativePath in relativePaths
-        pathToCreate = path.join(@referenceDir(), relativePath)
-        createWithin = path.dirname(pathToCreate)
-        try
-          if /\/$/.test(pathToCreate)
-            mkdirp pathToCreate
-          else
-            if atom.config.get "advanced-open-file.createFileInstantly"
-              mkdirp createWithin unless fs.existsSync(createWithin) and fs.statSync(createWithin)
-              touch pathToCreate
-            atom.workspace.open pathToCreate
-        catch error
-          @setMessage "alert", error.message
-
-      @detach()
+      createWithin = path.dirname(inputPath)
+      try
+        if inputPath.endsWith(path.sep)
+          mkdirp inputPath
+        else
+          if atom.config.get "advanced-open-file.createFileInstantly"
+            mkdirp createWithin unless fs.existsSync(createWithin) and fs.statSync(createWithin)
+            touch inputPath
+          atom.workspace.open inputPath
+        @detach()
+      catch error
+        @setMessage "alert", error.message
 
   undo: ->
     if @pathHistory.length > 0

@@ -1,6 +1,11 @@
-0.8.3 (Pending)
+0.9.0 (Pending)
 ===============
 
+* Fix handling of Windows paths by replace all forward-slash instances
+  with path.sep, and detecting the root directory for a path better.
+* Removed support for creating multiple paths at once, as it doesn't
+  really fit with what advanced-open-file is about and made the code
+  harder to understand.
 * Add `Ctrl-p`/`Ctrl-n` and `Ctrl-i`/`Ctrl-k` as alternative keybindings
   for moving through the file list, and use commands for all keybindings
   to make customization easier.
