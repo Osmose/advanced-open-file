@@ -260,6 +260,7 @@ class AdvancedFileView extends View
               mkdirp createWithin unless fs.existsSync(createWithin) and fs.statSync(createWithin)
               touch pathToCreate
             atom.workspace.open pathToCreate
+            atom.emitter.emit 'advanced-open-file-created', pathToCreate
         catch error
           @setMessage "alert", error.message
 
