@@ -9,6 +9,9 @@
 * Add `Ctrl-p`/`Ctrl-n` and `Ctrl-i`/`Ctrl-k` as alternative keybindings
   for moving through the file list, and use commands for all keybindings
   to make customization easier.
+* Fix bug where clearing the input and entering "~/" with Helm-style
+  shortcuts enabled did not automatically fill in the user's home
+  directory.
 
 
 0.8.2 (August 3 2015)

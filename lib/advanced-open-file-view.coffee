@@ -197,7 +197,7 @@ class AdvancedFileView extends View
       text = @miniEditor.getText()
       if text.endsWith path.sep + path.sep
         @updatePath getRoot(text), text[...-1]
-      else if text.endsWith path.sep + "~" + path.sep
+      else if text.endsWith("#{path.sep}~#{path.sep}") or text == "~/"
           try # Make sure ~ doesn't exist in the current directory.
             fs.statSync @inputPath()
           catch # It doesn't, do the shortcut!
