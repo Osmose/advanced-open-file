@@ -25,6 +25,19 @@ isRoot = (inputPath) ->
   return path.dirname(inputPath) is inputPath
 
 
+absolutify = (inputPath) ->
+  ###
+  Ensure that the given path is absolute. Relative paths are treated as
+  relative to the current project root.
+  ###
+  if getRoot(inputPath) == "."
+    projectPaths = atom.project.getPaths()
+    if projectPaths.length > 0
+      return path.join(projectPaths[0], inputPath)
+
+  return inputPath
+
+
 class DirectoryListView extends ScrollView
   @content: ->
     @ul class: "list-group", outlet: "directoryList"
@@ -115,8 +128,8 @@ class AdvancedFileView extends View
 
   selectItem: (listItem) ->
     if listItem.hasClass "parent-directory"
-      newPath = path.dirname(@inputPath())
-      @updatePath newPath + path.sep
+      newPath = path.dirname(@inputPath()) + path.sep
+      @updatePath newPath
     else
       newPath = path.join @inputPath(), listItem.text()
       if not listItem.hasClass "directory"
@@ -142,11 +155,13 @@ class AdvancedFileView extends View
   # Returns the list of directories matching the current input (path and autocomplete fragment)
   getFileList: (callback) ->
     input = @miniEditor.getText()
-    fs.stat @inputPath(), (err, stat) =>
+    inputPath = absolutify(@inputPath())
+
+    fs.stat inputPath, (err, stat) =>
       if err?.code is "ENOENT"
         return []
 
-      fs.readdir @inputPath(), (err, files) =>
+      fs.readdir inputPath, (err, files) =>
         fileList = []
         dirList = []
 
@@ -163,7 +178,7 @@ class AdvancedFileView extends View
 
           if matches
             try
-              isDir = fs.statSync(path.join(@inputPath(), filename)).isDirectory()
+              isDir = fs.statSync(path.join(inputPath, filename)).isDirectory()
             catch
               ## TODO fix error which is thrown when you hold backspace
 
@@ -199,7 +214,13 @@ class AdvancedFileView extends View
 
   updatePath: (newPath, oldPath=null) ->
     @pathHistory.push oldPath or @miniEditor.getText()
-    @miniEditor.setText path.normalize(newPath)
+    newPath = path.normalize(newPath)
+
+    # If the new path is ./, just leave it blank.
+    if newPath == ".#{path.sep}"
+      newPath = ''
+
+    @miniEditor.setText(newPath)
 
   update: ->
     if @detaching
@@ -251,6 +272,8 @@ class AdvancedFileView extends View
       @openOrCreate(@miniEditor.getText())
 
   openOrCreate: (inputPath) ->
+    inputPath = absolutify(inputPath)
+
     if fs.existsSync(inputPath)
       if fs.statSync(inputPath).isFile()
         atom.workspace.open inputPath

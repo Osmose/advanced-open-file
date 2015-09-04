@@ -16,6 +16,9 @@ Hit `Cmd-Alt-O`/`Ctrl-Alt-O` to open the file list to the directory of the
 current file. As you edit the path the file list will automatically show
 matching files and directories. Hit `Tab` to autocomplete the path.
 
+Relative paths are considered relative to the current project's first root
+folder.
+
 Hit `Enter` to open the file at the given path. If the file doesn't exist, a tab
 will be opened that will save to that file. Any directories in the path that
 don't exist will be created immediately upon hitting `Enter`.

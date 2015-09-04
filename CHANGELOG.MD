@@ -15,6 +15,9 @@
 * Added option for the default input value on toggle.
 * When scrolling with the keyboard, the list of matching files now
   scrolls to show the selected file when it is out of view.
+* Paths entered in the input that are not absolute are now considered
+  relative to the first project root. When relative paths are being used, the
+  directory listing will not show a parent entry past the project root.
 
 
 0.8.2 (August 3 2015)
