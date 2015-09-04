@@ -293,6 +293,21 @@ class AdvancedFileView extends View
     @find(".list-item").removeClass("selected")
     selectedElement.addClass("selected")
 
+    # If the selected element is out of view, scroll it into view.
+    parent = selectedElement.parent()
+    parentHeight = parent.height()
+    selectedPos = selectedElement.position()
+    selectedHeight = selectedElement.height()
+    if selectedPos.top < 0
+      # scrollPos.top is exactly the difference between the current
+      # scrollTop and the top of the selected element, so just add it.
+      parent.scrollTop(selectedPos.top + parent.scrollTop())
+    else if selectedPos.top + selectedHeight > parentHeight
+      # Find how far below the bottom the selectedElement is, and scroll
+      # down that amount plus the height to show it.
+      distanceBelow = selectedPos.top - parentHeight
+      parent.scrollTop(distanceBelow + selectedHeight + parent.scrollTop())
+
   detach: ->
     $("html").off("click", @outsideClickHandler) unless not @outsideClickHandler
     @outsideClickHandler = null
