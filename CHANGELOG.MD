@@ -12,6 +12,7 @@
 * Fix bug where clearing the input and entering "~/" with Helm-style
   shortcuts enabled did not automatically fill in the user's home
   directory.
+* Added option for the default input value on toggle.
 
 
 0.8.2 (August 3 2015)

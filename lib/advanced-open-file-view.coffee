@@ -7,6 +7,11 @@ mkdirp = require "mkdirp"
 touch = require "touch"
 
 
+DEFAULT_ACTIVE_FILE_DIR = "Active file's directory"
+DEFAULT_PROJECT_ROOT = "Project root"
+DEFAULT_EMPTY = "Empty"
+
+
 # Find filesystem root for the given path by calling path.dirname
 # until it returns the same value as its input.
 getRoot = (inputPath) ->
@@ -63,6 +68,13 @@ class AdvancedFileView extends View
       description: "See README for details."
       type: "boolean"
       default: false
+    defaultInputValue:
+      title: "Default input value"
+      description: "What should the path input default to when the dialog
+                    is opened?"
+      type: "string"
+      enum: [DEFAULT_ACTIVE_FILE_DIR, DEFAULT_PROJECT_ROOT, DEFAULT_EMPTY]
+      default: DEFAULT_ACTIVE_FILE_DIR
 
   @activate: (state) ->
     @advancedFileView = new AdvancedFileView(state.advancedFileViewState)
@@ -323,14 +335,18 @@ class AdvancedFileView extends View
     @getFileList (files) -> @renderAutocompleteList files
 
   suggestPath: ->
-    activePath = atom.workspace.getActiveTextEditor()?.getPath()
-    if activePath
-      activeDir = path.dirname(activePath) + path.sep
-      @miniEditor.setText activeDir
-    else
-      projectPaths = atom.project.getPaths()
-      if projectPaths.length > 0
-        @miniEditor.setText projectPaths[0] + path.sep
+    suggestedPath = ''
+    switch atom.config.get("advanced-open-file.defaultInputValue")
+      when DEFAULT_ACTIVE_FILE_DIR
+        activePath = atom.workspace.getActiveTextEditor()?.getPath()
+        if activePath
+          suggestedPath = path.dirname(activePath) + path.sep
+      when DEFAULT_PROJECT_ROOT
+        projectPaths = atom.project.getPaths()
+        if projectPaths.length > 0
+          suggestedPath = projectPaths[0] + path.sep
+
+    @miniEditor.setText suggestedPath
 
   toggle: ->
     if @hasParent()

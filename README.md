@@ -83,6 +83,13 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
     exist.
   </dd>
 
+  <dt>Default input value</dt>
+  <dd>
+    Determines what the default value in the path input is when the dialog is
+    opened. Possible choices are nothing, the current project's root directory,
+    or the directory of the currently-active file.
+  </dd>
+
   <dt>Helm-style fast directory switching</dt>
   <dd>
     <p>
