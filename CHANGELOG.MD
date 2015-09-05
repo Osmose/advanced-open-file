@@ -1,5 +1,5 @@
-0.9.0 (Pending)
-===============
+0.9.0 (September 4 2015)
+========================
 
 * Fix handling of Windows paths by replace all forward-slash instances
   with path.sep, and detecting the root directory for a path better.
