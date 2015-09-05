@@ -2,6 +2,11 @@
     display: flex;
     flex-direction: column;
 
+    .icon-file-add,
+    .icon-file-directory-create {
+        padding-left: 10px;
+    }
+
     .list-group {
         overflow: auto;
         flex: 2;
@@ -14,6 +19,7 @@
         .add-project-folder {
             float: right;
             color: @text-color-subtle;
+            margin-right: -12px;
 
             &:hover {
                 color: @text-color-highlight;
