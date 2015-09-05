@@ -1,14 +1,14 @@
 # Advanced Open File
 
-Advanced Open File is fork of
-[Advanced New File](https://github.com/Trudko/advanced-new-file), itself a fork
-of [Fancy New File](https://github.com/rev087/fancy-new-file). Thanks to both
-rev087 and Trudko for their work.
-
 Advanced Open File is a package for helping Atom users to open files and folders
 easily. It can also create new files and folders if they don't exist.
 
 ![Demo of plugin functionality](http://osmose.github.io/advanced-open-file/demo.gif)
+
+Advanced Open File is fork of
+[Advanced New File](https://github.com/Trudko/advanced-new-file), itself a fork
+of [Fancy New File](https://github.com/rev087/fancy-new-file). Thanks to both
+rev087 and Trudko for their work.
 
 ## Usage
 
