@@ -5,11 +5,16 @@ osenv = require "osenv"
 path = require "path"
 mkdirp = require "mkdirp"
 touch = require "touch"
+{Emitter} = require 'event-kit'
 
 
 DEFAULT_ACTIVE_FILE_DIR = "Active file's directory"
 DEFAULT_PROJECT_ROOT = "Project root"
 DEFAULT_EMPTY = "Empty"
+
+
+# Shared emitter for outside packages to subscribe to.
+emitter = new Emitter()
 
 
 # Find filesystem root for the given path by calling path.dirname
@@ -88,6 +93,12 @@ class AdvancedFileView extends View
       type: "string"
       enum: [DEFAULT_ACTIVE_FILE_DIR, DEFAULT_PROJECT_ROOT, DEFAULT_EMPTY]
       default: DEFAULT_ACTIVE_FILE_DIR
+
+  @onDidOpenPath: (callback) ->
+    emitter.on("did-open-path", callback)
+
+  @onDidCreatePath: (callback) ->
+    emitter.on("did-create-path", callback)
 
   @activate: (state) ->
     @advancedFileView = new AdvancedFileView(state.advancedFileViewState)
@@ -277,6 +288,7 @@ class AdvancedFileView extends View
     if fs.existsSync(inputPath)
       if fs.statSync(inputPath).isFile()
         atom.workspace.open inputPath
+        emitter.emit("did-open-path", inputPath)
         @detach()
       else
         atom.beep()
@@ -289,7 +301,9 @@ class AdvancedFileView extends View
           if atom.config.get "advanced-open-file.createFileInstantly"
             mkdirp createWithin unless fs.existsSync(createWithin) and fs.statSync(createWithin)
             touch inputPath
+            emitter.emit("did-create-path", inputPath)
           atom.workspace.open inputPath
+          emitter.emit("did-open-path", inputPath)
         @detach()
       catch error
         @setMessage "alert", error.message

@@ -2,6 +2,8 @@
 ===============
 
 * Improved dialog layout. (JesseLeite)
+* Added event emitter, `onDidOpenFile`, and `onDidCreateFile` for other packages
+  to detect when files are opened.
 
 
 0.9.1 (September 4 2015)

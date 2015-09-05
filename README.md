@@ -74,7 +74,7 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
   'ctrl-j': 'advanced-open-file:move-cursor-down'
 ```
 
-## Settings:
+## Settings
 
 <dl>
   <dt>Case-sensitive auto-completion</dt>
@@ -111,6 +111,40 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
     </ul>
   </dd>
 </dl>
+
+## Events
+
+Other packages can subscribe to events to get notified when certain actions
+happen in advanced-open-file. To do so, you'll need to load the main module
+using `atom.package`:
+
+```coffeescript
+modulePath = atom.packages.getLoadedPackage('advanced-open-file').mainModulePath
+advancedOpenFile = require(modulePath)
+```
+
+### `onDidOpenPath`
+
+Triggered when a file is opened via advanced-open-file.
+
+```coffeescript
+advancedOpenFile.onDidOpenPath((path) -> {
+  console.log(path)
+})
+```
+
+### `onDidCreatePath`
+
+Triggered when a file is created via advanced-open-file. Note that this is only
+triggered when the "Create files instantly" preference is enabled. It does not
+trigger when the preference is disabled and a new file is opened and then
+subsequently saved.
+
+```coffeescript
+advancedOpenFile.onDidCreatePath((path) -> {
+  console.log(path)
+})
+```
 
 ## License
 
