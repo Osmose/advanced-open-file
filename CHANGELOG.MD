@@ -1,5 +1,5 @@
-0.9.2 (Pending)
-===============
+0.9.2 (September 7, 2015)
+=========================
 
 * Improved dialog layout. (JesseLeite)
 * Added event emitter, `onDidOpenFile`, and `onDidCreateFile` for other packages

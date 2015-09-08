@@ -3,6 +3,13 @@
   "main": "./lib/advanced-open-file-view",
   "version": "0.9.1",
   "description": "Open and create files and directories easily. Type in a path (with autocomplete) and view directory contents.",
+  "keywords": [
+    "atom",
+    "open",
+    "file",
+    "create",
+    "new"
+  ],
   "activationCommands": {
     "atom-workspace": [
       "advanced-open-file:toggle"
