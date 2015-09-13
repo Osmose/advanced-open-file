@@ -47,11 +47,11 @@ class DirectoryListView extends ScrollView
   @content: ->
     @ul class: "list-group", outlet: "directoryList"
 
-  renderFiles: (files, hasParent, showOpenAsProjectFolder) ->
+  renderFiles: (files, showParent, showOpenAsProjectFolder) ->
     @empty()
 
     # Parent directory
-    if hasParent
+    if showParent
       @append $$ ->
         @li class: "list-item parent-directory", =>
           @span class: "icon icon-file-directory", ".."
@@ -272,8 +272,8 @@ class AdvancedFileView extends View
     isProjectFolder = inputPath in atom.project.getPaths()
     showOpenAsProjectFolder = not withinProjectFolder and not isProjectFolder
 
-    input = @inputPath()
-    @directoryListView.renderFiles files, input and not isRoot(input), showOpenAsProjectFolder
+    showParent = inputPath and inputPath.endsWith(path.sep) and not isRoot(inputPath)
+    @directoryListView.renderFiles files, showParent, showOpenAsProjectFolder
 
   confirm: ->
     selected = @find(".list-item.selected")

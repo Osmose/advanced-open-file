@@ -1,3 +1,10 @@
+0.9.3 (Pending)
+===============
+
+* Only show the parent directory in the listing if the file list is not being
+  filtered.
+
+
 0.9.2 (September 7, 2015)
 =========================
 
