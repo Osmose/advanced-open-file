@@ -1,3 +1,10 @@
+0.9.3 (Pending)
+===============
+
+* Rename Helm-style shortcuts to fast directory-switch shortcuts and add a new
+  shortcut `:/` for switching to the project root directory.
+
+
 0.9.2 (September 7, 2015)
 =========================
 
