@@ -40,7 +40,7 @@ absolutify = (inputPath) ->
     if projectPaths.length > 0
       return path.join(projectPaths[0], inputPath)
 
-  return inputPath
+  return path.resolve(inputPath)
 
 
 class DirectoryListView extends ScrollView
@@ -269,7 +269,7 @@ class AdvancedFileView extends View
 
   # Renders the list of directories
   renderAutocompleteList: (files) ->
-    inputPath = @inputPath()
+    inputPath = absolutify(@inputPath())
     withinProjectFolder = atom.project.contains(inputPath)
     isProjectFolder = inputPath in atom.project.getPaths()
     showOpenAsProjectFolder = not withinProjectFolder and not isProjectFolder

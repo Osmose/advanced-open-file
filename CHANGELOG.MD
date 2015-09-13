@@ -3,6 +3,9 @@
 
 * Disabled soft-word-wrap on the path input to avoid scrolling/wrapping issues
   on long paths.
+* Improve directory detection for adding the project folder button. Fixes an
+  issue with Windows directories starting with a drive letter missing the
+  button.
 
 
 0.9.2 (September 7, 2015)
