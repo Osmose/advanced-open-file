@@ -1,5 +1,5 @@
-0.9.3 (Pending)
-===============
+0.10.0 (Pending)
+================
 
 * Disabled soft-word-wrap on the path input to avoid scrolling/wrapping issues
   on long paths.
@@ -8,6 +8,8 @@
   button.
 * Rename Helm-style shortcuts to fast directory-switch shortcuts and add a new
   shortcut `:/` for switching to the project root directory.
+* Only show the parent directory in the listing if the file list is not being
+  filtered.
 
 
 0.9.2 (September 7, 2015)
