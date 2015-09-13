@@ -6,6 +6,8 @@
 * Improve directory detection for adding the project folder button. Fixes an
   issue with Windows directories starting with a drive letter missing the
   button.
+* Rename Helm-style shortcuts to fast directory-switch shortcuts and add a new
+  shortcut `:/` for switching to the project root directory.
 
 
 0.9.2 (September 7, 2015)

@@ -93,7 +93,7 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
     or the directory of the currently-active file.
   </dd>
 
-  <dt>Helm-style fast directory switching</dt>
+  <dt>Shortcuts for fast directory switching</dt>
   <dd>
     <p>
       When enabled, allows for quick directory switching when appending certain
@@ -107,6 +107,10 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
       <li>
         Adding a tilde and a slash (e.g. <code>~/</code>) will switch to the
         current user's home directory.
+      </li>
+      <li>
+        Adding a colon and a slash (e.g. <code>:/</code>) will switch to the
+        current project's root directory.
       </li>
     </ul>
   </dd>

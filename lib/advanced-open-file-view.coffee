@@ -82,7 +82,7 @@ class AdvancedFileView extends View
       type: "boolean"
       default: false
     helmDirSwitch:
-      title: "Helm-style fast directory switching"
+      title: "Shortcuts for fast directory switching"
       description: "See README for details."
       type: "boolean"
       default: false
@@ -243,11 +243,15 @@ class AdvancedFileView extends View
       text = @miniEditor.getText()
       if text.endsWith path.sep + path.sep
         @updatePath getRoot(text), text[...-1]
-      else if text.endsWith("#{path.sep}~#{path.sep}") or text == "~/"
-          try # Make sure ~ doesn't exist in the current directory.
-            fs.statSync @inputPath()
-          catch # It doesn't, do the shortcut!
-            @updatePath osenv.home() + path.sep, text[...-2]
+      else if text.endsWith("#{path.sep}~#{path.sep}") or text == "~#{path.sep}"
+        try # Make sure ~ doesn't exist in the current directory.
+          fs.statSync @inputPath()
+        catch # It doesn't, do the shortcut!
+          @updatePath osenv.home() + path.sep, text[...-2]
+      else if text.endsWith("#{path.sep}:#{path.sep}") or text == ":#{path.sep}"
+        projectPaths = atom.project.getPaths()
+        if projectPaths.length > 0
+          @updatePath projectPaths[0] + path.sep, text[...-2]
 
     @getFileList (files) ->
       @renderAutocompleteList files
