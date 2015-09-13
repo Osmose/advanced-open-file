@@ -19,11 +19,15 @@
         .add-project-folder {
             float: right;
             color: @text-color-subtle;
-            margin-right: -12px;
 
             &:hover {
                 color: @text-color-highlight;
                 cursor: pointer;
+            }
+
+            &::before {
+                width: auto;
+                margin-right: 0;
             }
         }
 
