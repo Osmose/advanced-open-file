@@ -130,7 +130,9 @@ class AdvancedFileView extends View
     @directoryListView.on "click", ".list-item", (ev) => @clickItem(ev)
     @directoryListView.on "click", ".add-project-folder", (ev) => @addProjectFolder(ev)
 
-    @miniEditor.getModel().setPlaceholderText(path.join("path","to","file.txt"));
+    editor = @miniEditor.getModel()
+    editor.setPlaceholderText(path.join("path","to","file.txt"));
+    editor.setSoftWrapped(false);
 
   clickItem: (ev) ->
     listItem = $(ev.currentTarget)

@@ -1,3 +1,10 @@
+0.9.3 (Pending)
+===============
+
+* Disabled soft-word-wrap on the path input to avoid scrolling/wrapping issues
+  on long paths.
+
+
 0.9.2 (September 7, 2015)
 =========================
 
