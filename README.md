@@ -39,40 +39,40 @@ autocompletion or directory shortcuts.
 Available commands for binding:
 
 <dl>
-  <dt>`advanced-open-file:toggle`</dt>
+  <dt><code>advanced-open-file:toggle</code></dt>
   <dd>Toggles the Advanced Open File dialog.</dd>
 
-  <dt>`core:confirm`</dt>
+  <dt><code>core:confirm</code></dt>
   <dd>
     If a path has been selected with the cursor, open it. If no path is
     selected, open the current path in the input.
   </dd>
 
-  <dt>`advanced-open-file:confirm-selected-or-first`</dt>
+  <dt><code>advanced-open-file:confirm-selected-or-first</code></dt>
   <dd>
-    Similar to `core:confirm`. If nothing is selected, select the first item
-    in the list.
+    Similar to <code>core:confirm</code>. If nothing is selected, select the
+    first item in the list.
   </dd>
 
-  <dt>`core:cancel`</dt>
+  <dt><code>core:cancel</code></dt>
   <dd>Close the Advanced Open File dialog.</dd>
 
-  <dt>`advanced-open-file:autocomplete`</dt>
+  <dt><code>advanced-open-file:autocomplete</code></dt>
   <dd>Attempts to autocomplete the current input.</dd>
 
-  <dt>`advanced-open-file:undo`</dt>
+  <dt><code>advanced-open-file:undo</code></dt>
   <dd>Undo changes to the current path.</dd>
 
-  <dt>`advanced-open-file:move-cursor-up`</dt>
+  <dt><code>advanced-open-file:move-cursor-up</code></dt>
   <dd>Move the cursor/highlight for the currently selected file up.</dd>
 
-  <dt>`advanced-open-file:move-cursor-down`</dt>
+  <dt><code>advanced-open-file:move-cursor-down</code></dt>
   <dd>Move the cursor/highlight for the currently selected file down.</dd>
 
-  <dt>`advanced-open-file:delete-path-component`</dt>
+  <dt><code>advanced-open-file:delete-path-component</code></dt>
   <dd>
-    A more powerful version of `alt-backspace` that erases the a directory
-    component in the miniEditor including the slash ('/').
+    A more powerful version of <code>alt-backspace</code> that erases the a
+    directory component in the miniEditor including the slash ('/').
   </dd>
 </dl>
 
@@ -99,9 +99,6 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
 ## Settings
 
 <dl>
-  <dt>Case-sensitive auto-completion</dt>
-  <dd>Control whether auto-completion is case-sensitive. Defaults to false.</dd>
-
   <dt>Create files instantly</dt>
   <dd>
     If checked, files are created immediately instead of on save if they don't

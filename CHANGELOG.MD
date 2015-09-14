@@ -1,3 +1,15 @@
+0.12.0 (November 6, 2015)
+=========================
+
+* Rewrote package using ES2015 via Atom's built-in Babel support. Replaced use
+  of space-pen and jQuery with standard DOM functions for noticeably faster
+  performance. Added specs for testing package behavior and added a TravisCI
+  config to run them automatically.
+* As part of rewrite, changed path separator behavior to detect which slash to
+  use based on the existing path, e.g. `/foo/bar` uses `/`, while `\baz\biff`
+  uses `\`.
+
+
 0.11.0 (October 5, 2015)
 ========================
 
