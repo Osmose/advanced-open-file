@@ -114,6 +114,8 @@ class AdvancedFileView extends View
         "Enter the path for the file/directory. Directories end with a "#{path.sep}"."
       @subview "miniEditor", new TextEditorView({mini:true})
       @subview "directoryListView", new DirectoryListView()
+      @div class: 'settings-view', => # Piggyback on settings view styles.
+        @div class: 'alert alert-error icon icon-alert', style: 'display: none', outlet: 'errorMessage'
 
   @detaching: false,
 
@@ -164,6 +166,9 @@ class AdvancedFileView extends View
     else
       return path.dirname(input)
 
+  showError: (message) ->
+    @directoryListView.hide()
+    @errorMessage.show().text(message)
 
   # Returns the list of directories matching the current input (path and autocomplete fragment)
   getFileList: (callback) ->
@@ -175,6 +180,10 @@ class AdvancedFileView extends View
         return []
 
       fs.readdir inputPath, (err, files) =>
+        if err?
+          @showError("Could not read directory contents: #{err.toString()}")
+          return
+
         fileList = []
         dirList = []
 
@@ -279,6 +288,8 @@ class AdvancedFileView extends View
     showOpenAsProjectFolder = not withinProjectFolder and not isProjectFolder
 
     showParent = inputPath and inputPath.endsWith(path.sep) and not isRoot(inputPath)
+    @errorMessage.hide()
+    @directoryListView.show()
     @directoryListView.renderFiles files, showParent, showOpenAsProjectFolder
 
   confirm: ->

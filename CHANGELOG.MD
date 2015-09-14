@@ -10,6 +10,8 @@
   shortcut `:/` for switching to the project root directory.
 * Only show the parent directory in the listing if the file list is not being
   filtered.
+* Show error message when we fail to list directory contents, such as when the
+  user doesn't have permission to read the directory.
 
 
 0.9.2 (September 7, 2015)
