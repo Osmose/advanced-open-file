@@ -10,6 +10,9 @@
   shortcut `:/` for switching to the project root directory.
 * Only show the parent directory in the listing if the file list is not being
   filtered.
+* Show "Add as project folder" button for all folders that are not project
+  folders. Previously all folders within project folders were missing the
+  button.
 
 
 0.9.2 (September 7, 2015)

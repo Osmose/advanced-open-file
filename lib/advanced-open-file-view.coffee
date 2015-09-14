@@ -47,7 +47,7 @@ class DirectoryListView extends ScrollView
   @content: ->
     @ul class: "list-group", outlet: "directoryList"
 
-  renderFiles: (files, showParent, showOpenAsProjectFolder) ->
+  renderFiles: (files, showParent) ->
     @empty()
 
     # Parent directory
@@ -61,7 +61,7 @@ class DirectoryListView extends ScrollView
       @append $$ ->
         @li class: "list-item #{'directory' if file.isDir}", =>
           @span class: "filename icon #{icon}", "data-name": path.basename(file.name), file.name
-          if showOpenAsProjectFolder and file.isDir then @span
+          if file.isDir and not file.isProjectDir then @span
             class: "add-project-folder icon icon-plus",
             title: "Open as project folder"
 
@@ -190,12 +190,18 @@ class AdvancedFileView extends View
             not caseSensitive and filename.toLowerCase().indexOf(fragment) is 0
 
           if matches
+            filePath = path.join(inputPath, filename)
+
             try
-              isDir = fs.statSync(path.join(inputPath, filename)).isDirectory()
+              isDir = fs.statSync(filePath).isDirectory()
             catch
               ## TODO fix error which is thrown when you hold backspace
 
-            (if isDir then dirList else fileList).push name:filename, isDir:isDir
+            (if isDir then dirList else fileList).push({
+              name: filename,
+              isDir: isDir,
+              isProjectDir: isDir and filePath in atom.project.getPaths(),
+            })
 
         callback.apply @, [dirList.concat fileList]
 
@@ -274,12 +280,8 @@ class AdvancedFileView extends View
   # Renders the list of directories
   renderAutocompleteList: (files) ->
     inputPath = absolutify(@inputPath())
-    withinProjectFolder = atom.project.contains(inputPath)
-    isProjectFolder = inputPath in atom.project.getPaths()
-    showOpenAsProjectFolder = not withinProjectFolder and not isProjectFolder
-
     showParent = inputPath and inputPath.endsWith(path.sep) and not isRoot(inputPath)
-    @directoryListView.renderFiles files, showParent, showOpenAsProjectFolder
+    @directoryListView.renderFiles files, showParent
 
   confirm: ->
     selected = @find(".list-item.selected")
