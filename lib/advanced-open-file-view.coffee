@@ -40,7 +40,11 @@ absolutify = (inputPath) ->
     if projectPaths.length > 0
       return path.join(projectPaths[0], inputPath)
 
-  return path.resolve(inputPath)
+  absolutePath = path.resolve(inputPath)
+  if inputPath.endsWith(path.sep)
+    return absolutePath + path.sep
+  else
+    return absolutePath
 
 
 class DirectoryListView extends ScrollView
