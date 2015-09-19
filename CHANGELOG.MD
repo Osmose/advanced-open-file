@@ -13,6 +13,7 @@
 * Show "Add as project folder" button for all folders that are not project
   folders. Previously all folders within project folders were missing the
   button.
+* Scroll cursor in input to the end of the text when triggering autocomplete.
 
 
 0.9.2 (September 7, 2015)
