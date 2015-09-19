@@ -1,5 +1,5 @@
-0.10.0 (Pending)
-================
+0.10.0 (September 19, 2015)
+===========================
 
 * Disabled soft-word-wrap on the path input to avoid scrolling/wrapping issues
   on long paths.
