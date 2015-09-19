@@ -132,6 +132,7 @@ class AdvancedFileView extends View
       "advanced-open-file:move-cursor-down": => @moveCursorDown()
       "advanced-open-file:move-cursor-up": => @moveCursorUp()
       "advanced-open-file:delete-path-component": => @deletePathComponent()
+      "advanced-open-file:confirm-selected-or-first": => @confirmSelectedOrFirst()
     @directoryListView.on "click", ".list-item", (ev) => @clickItem(ev)
     @directoryListView.on "click", ".add-project-folder", (ev) => @addProjectFolder(ev)
 
@@ -295,6 +296,21 @@ class AdvancedFileView extends View
     selected = @find(".list-item.selected")
     if selected.length > 0
       @selectItem(selected)
+    else
+      @openOrCreate(@miniEditor.getText())
+
+  confirmSelectedOrFirst: ->
+    ###
+    Select the currently selected item. If nothing is selected, and there are
+    non-zero items in the list, select the first. Else, create a new file with
+    the given name.
+    ###
+    all = @find(".list-item:not(.parent-directory)")
+    selected = all.filter(".selected")
+    if selected.length > 0
+      @selectItem(selected)
+    else if all.length > 0
+      @selectItem(all.filter(":first"))
     else
       @openOrCreate(@miniEditor.getText())
 

@@ -16,6 +16,8 @@
 * Scroll cursor in input to the end of the text when triggering autocomplete.
 * Add `advanced-open-file:delete-path-component` command for easily navigating
   directory hierarchies. (artagnon)
+* Add `advanced-open-file:confirm-selected-or-first` command for easier opening
+  of files; selects first item when nothing is selected.
 
 
 0.9.2 (September 7, 2015)

@@ -42,6 +42,21 @@ Available commands for binding:
   <dt>`advanced-open-file:toggle`</dt>
   <dd>Toggles the Advanced Open File dialog.</dd>
 
+  <dt>`core:confirm`</dt>
+  <dd>
+    If a path has been selected with the cursor, open it. If no path is
+    selected, open the current path in the input.
+  </dd>
+
+  <dt>`advanced-open-file:confirm-selected-or-first`</dt>
+  <dd>
+    Similar to `core:confirm`. If nothing is selected, select the first item
+    in the list.
+  </dd>
+
+  <dt>`core:cancel`</dt>
+  <dd>Close the Advanced Open File dialog.</dd>
+
   <dt>`advanced-open-file:autocomplete`</dt>
   <dd>Attempts to autocomplete the current input.</dd>
 
