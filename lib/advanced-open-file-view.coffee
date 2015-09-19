@@ -223,7 +223,7 @@ class AdvancedFileView extends View
 
         suffix = if files[0].isDir then path.sep else ""
         @updatePath(newPath + suffix)
-        @scrollInputToEnd()
+        @scrollToCursor()
 
       else if files?.length > 1
         longestPrefix = @longestCommonPrefix((file.name for file in files))
@@ -231,7 +231,7 @@ class AdvancedFileView extends View
 
         if (newPath.length > @inputPath().length)
           @updatePath(newPath)
-          @scrollInputToEnd()
+          @scrollToCursor()
         else
           atom.beep()
       else
@@ -359,8 +359,8 @@ class AdvancedFileView extends View
       distanceBelow = selectedPos.top - parentHeight
       parent.scrollTop(distanceBelow + selectedHeight + parent.scrollTop())
 
-  scrollInputToEnd: ->
-    @miniEditor.getModel().setCursorScreenPosition [0, 10000], autoscroll: true
+  scrollToCursor: ->
+    @miniEditor.getModel().scrollToCursorPosition()
 
   detach: ->
     $("html").off("click", @outsideClickHandler) unless not @outsideClickHandler
@@ -395,7 +395,7 @@ class AdvancedFileView extends View
     $("html").on "click", @outsideClickHandler
 
     @miniEditor.focus()
-    @scrollInputToEnd()
+    @scrollToCursor()
 
     # Populate the directory listing live
     @miniEditor.getModel().onDidChange => @update()
