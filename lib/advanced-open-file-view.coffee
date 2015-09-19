@@ -114,7 +114,7 @@ class AdvancedFileView extends View
     @div class: "advanced-open-file", =>
       @p
         outlet: "message",
-        class: "icon icon-file-add",
+        class: "info-message icon icon-file-add",
         "Enter the path for the file/directory. Directories end with a "#{path.sep}"."
       @subview "miniEditor", new TextEditorView({mini:true})
       @subview "directoryListView", new DirectoryListView()
