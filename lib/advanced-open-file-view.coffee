@@ -131,6 +131,7 @@ class AdvancedFileView extends View
       "advanced-open-file:undo": => @undo()
       "advanced-open-file:move-cursor-down": => @moveCursorDown()
       "advanced-open-file:move-cursor-up": => @moveCursorUp()
+      "advanced-open-file:confirm-selected-or-only": => @confirmSelectedOrOnly()
     @directoryListView.on "click", ".list-item", (ev) => @clickItem(ev)
     @directoryListView.on "click", ".add-project-folder", (ev) => @addProjectFolder(ev)
 
@@ -293,6 +294,21 @@ class AdvancedFileView extends View
     selected = @find(".list-item.selected")
     if selected.length > 0
       @selectItem(selected)
+    else
+      @openOrCreate(@miniEditor.getText())
+
+  confirmSelectedOrOnly: ->
+    ###
+    Select the currently selected item. If nothing is selected, and
+    there is only one entry in the autocomplete list, select that item
+    instead. If neither of these is true, create a new file.
+    ###
+    all = @find(".list-item:not(.parent-directory)")
+    selected = all.filter(".selected")
+    if selected.length > 0
+      @selectItem(selected)
+    else if all.length == 1
+      @selectItem(all)
     else
       @openOrCreate(@miniEditor.getText())
 

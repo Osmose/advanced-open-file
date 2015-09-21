@@ -14,6 +14,8 @@
   folders. Previously all folders within project folders were missing the
   button.
 * Scroll cursor in input to the end of the text when triggering autocomplete.
+* Add `advanced-open-file:confirm-selected-or-only` command for easier opening
+  of files when the autocomplete list has only one matching file.
 
 
 0.9.2 (September 7, 2015)
