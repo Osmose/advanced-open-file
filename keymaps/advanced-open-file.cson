@@ -26,6 +26,9 @@
   'ctrl-i': 'advanced-open-file:move-cursor-up'
   'ctrl-k': 'advanced-open-file:move-cursor-down'
 
+  # A more powerful version of alt-backspace
+  'ctrl-l': 'advanced-open-file:delete-path-component'
+
 '.platform-darwin .advanced-open-file atom-text-editor':
   'cmd-z': 'advanced-open-file:undo'
 

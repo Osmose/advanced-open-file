@@ -131,6 +131,7 @@ class AdvancedFileView extends View
       "advanced-open-file:undo": => @undo()
       "advanced-open-file:move-cursor-down": => @moveCursorDown()
       "advanced-open-file:move-cursor-up": => @moveCursorUp()
+      "advanced-open-file:delete-path-component": => @deletePathComponent()
     @directoryListView.on "click", ".list-item", (ev) => @clickItem(ev)
     @directoryListView.on "click", ".add-project-folder", (ev) => @addProjectFolder(ev)
 
@@ -246,6 +247,7 @@ class AdvancedFileView extends View
       newPath = ''
 
     @miniEditor.setText(newPath)
+    @scrollToCursor()
 
   update: ->
     if @detaching
@@ -325,8 +327,14 @@ class AdvancedFileView extends View
   undo: ->
     if @pathHistory.length > 0
       @miniEditor.setText @pathHistory.pop()
+      @scrollToCursor()
     else
       atom.beep()
+
+  deletePathComponent: ->
+    fullPath = @miniEditor.getText()
+    upOneLevel = path.dirname(fullPath)
+    @updatePath(upOneLevel + path.sep)
 
   moveCursorDown: ->
     selected = @find(".list-item.selected").next()

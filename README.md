@@ -53,14 +53,21 @@ Available commands for binding:
 
   <dt>`advanced-open-file:move-cursor-down`</dt>
   <dd>Move the cursor/highlight for the currently selected file down.</dd>
+
+  <dt>`advanced-open-file:delete-path-component`</dt>
+  <dd>
+    A more powerful version of `alt-backspace` that erases the a directory
+    component in the miniEditor including the slash ('/').
+  </dd>
 </dl>
 
 The following extra keybindings are included by default:
 
-Action                                | Extra Keys
-------------------------------------- | ------------------
-`advanced-open-file:move-cursor-up`   | `Ctrl-p`, `Ctrl-i`
-`advanced-open-file:move-cursor-down` | `Ctrl-n`, `Ctrl-k`
+Action                                     | Extra Keys
+------------------------------------------ | ------------------
+`advanced-open-file:move-cursor-up`        | `Ctrl-p`, `Ctrl-i`
+`advanced-open-file:move-cursor-down`      | `Ctrl-n`, `Ctrl-k`
+`advanced-open-file:delete-path-component` | `Ctrl-l`
 
 You can of course remap the keys however you wish. For example, add the
 following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
