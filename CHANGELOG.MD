@@ -15,7 +15,7 @@
   button.
 * Scroll cursor in input to the end of the text when triggering autocomplete.
 * Add `advanced-open-file:delete-path-component` command for easily navigating
-  directory hierarchies.
+  directory hierarchies. (artagnon)
 
 
 0.9.2 (September 7, 2015)

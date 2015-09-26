@@ -11,3 +11,4 @@
 
 # Contributors
 - [JesseLeite](https://github.com/JesseLeite)
+- [artagnon](https://github.com/artagnon)
