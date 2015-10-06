@@ -1,5 +1,5 @@
-0.11.0 (Pending)
-================
+0.11.0 (October 5, 2015)
+========================
 
 * Add `advanced-open-file:delete-path-component` command for easily navigating
   directory hierarchies. (artagnon)
