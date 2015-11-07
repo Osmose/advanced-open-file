@@ -8,6 +8,10 @@
 * As part of rewrite, changed path separator behavior to detect which slash to
   use based on the existing path, e.g. `/foo/bar` uses `/`, while `\baz\biff`
   uses `\`.
+* Removed the `Case-sensitive auto-completion` preference. Now auto-completion
+  is always case-sensitive, and matching for the file listing is
+  case-insensitive unless the current fragment contains a capital letter, in
+  which case it becomes case-sensitive.
 
 
 0.11.0 (October 5, 2015)
