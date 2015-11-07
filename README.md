@@ -1,5 +1,7 @@
 # Advanced Open File
 
+[![Build Status](https://travis-ci.org/Osmose/advanced-open-file.svg)](https://travis-ci.org/Osmose/advanced-open-file)
+
 Advanced Open File is a package for helping Atom users to open files and folders
 easily. It can also create new files and folders if they don't exist.
 
