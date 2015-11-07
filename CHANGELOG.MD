@@ -1,3 +1,12 @@
+0.12.4 (Pending)
+================
+
+* Ignore all errors when running stat on files and treat them as if they don't
+  exist. Previously only ENOENT errors were ignored.
+* Fix bug in path shortcuts where they were being applied even if a path
+  separator wasn't before the shortcut itself.
+
+
 0.12.3 (November 14, 2015)
 ==========================
 

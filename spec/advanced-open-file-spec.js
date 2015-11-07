@@ -317,7 +317,7 @@ describe('Functional tests', () => {
 
         it('can switch to the user\'s home directory using a shortcut', () => {
             atom.config.set('advanced-open-file.helmDirSwitch', true);
-            setPath(fixturePath('subdir') + '~' + stdPath.sep);
+            setPath(fixturePath('subdir') + stdPath.sep + '~' + stdPath.sep);
             expect(currentPath()).toEqual(osenv.home() + stdPath.sep);
         });
 
@@ -333,7 +333,7 @@ describe('Functional tests', () => {
         it('can switch to the project root directory using a shortcut', () => {
             atom.config.set('advanced-open-file.helmDirSwitch', true);
             atom.project.setPaths([fixturePath('examples')]);
-            setPath(fixturePath('subdir') + ':' + stdPath.sep);
+            setPath(fixturePath('subdir') + stdPath.sep + ':' + stdPath.sep);
             expect(currentPath()).toEqual(fixturePath('examples') + stdPath.sep);
         });
     });
@@ -635,6 +635,25 @@ describe('Functional tests', () => {
             dispatch('core:confirm');
             expect(handler).toHaveBeenCalledWith(path);
             sub.dispose();
+        });
+    });
+
+    // Only run Windows-specific tests when enabled.
+    let windowsDescribe = process.env.AOF_WINDOWS_TESTS ? describe : xdescribe;
+    windowsDescribe('Windows-specific tests', () => {
+        // Just as a note, we're assuming C:\ exists and is the root
+        // system drive. It is on AppVeyor, and that's good enough.
+
+        it('can read the root directory without failing', () => {
+            // This potentially fails because we stat in-use files like
+            // pagefile.sys.
+            expect(() => {setPath('C:\\')}).not.toThrow();
+        });
+
+        it('does not replace drive letters with the project root', () => {
+            atom.project.setPaths([fixturePath()]);
+            setPath('C:/');
+            expect(currentPath()).toEqual('C:/');
         });
     });
 });
