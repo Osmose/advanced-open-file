@@ -1,3 +1,9 @@
+0.13.1 (Pending)
+================
+
+* #57: Add setting for fuzzy filename matching.
+
+
 0.13.0 (November 29, 2015)
 ==========================
 

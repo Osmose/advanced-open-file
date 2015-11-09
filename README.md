@@ -132,6 +132,15 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
     or the directory of the currently-active file.
   </dd>
 
+  <dt>Use fuzzy matching for matching filenames</dt>
+  <dd>
+    Changes the method for matching filenames while typing to use a fuzzy match
+    algorithm instead of a prefix match one. When enabled, matches are sorted by
+    their match weight instead of by name and type, and autocomplete
+    automatically chooses the closest result instead of the common prefix among
+    matching filenames.
+  </dd>
+
   <dt>Shortcuts for fast directory switching</dt>
   <dd>
     <p>
