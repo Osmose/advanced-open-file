@@ -1,6 +1,7 @@
 0.13.1 (Pending)
 ================
 
+* #57: Add setting for fuzzy filename matching.
 * #84: Cursor no longer resets to the end of the path when typing in the middle
   of the path.
 * #81: Fix project root shortcut when path input is otherwise empty.

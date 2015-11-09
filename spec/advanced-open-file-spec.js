@@ -106,6 +106,12 @@ describe('Functional tests', () => {
         ui.find(`.list-item[data-file-name$='${filename}']`).click();
     }
 
+    function assertAutocompletesTo(inputPath, autocompletedPath) {
+        setPath(inputPath);
+        dispatch('advanced-open-file:autocomplete');
+        expect(currentPath()).toEqual(autocompletedPath);
+    }
+
     describe('Modal dialog', () => {
         beforeEach(resetConfig);
 
@@ -237,12 +243,6 @@ describe('Functional tests', () => {
     describe('Path input', () => {
         beforeEach(resetConfig);
         beforeEach(openModal);
-
-        function assertAutocompletesTo(inputPath, autocompletedPath) {
-            setPath(inputPath);
-            dispatch('advanced-open-file:autocomplete');
-            expect(currentPath()).toEqual(autocompletedPath);
-        }
 
         it('can autocomplete the current input', () => {
             assertAutocompletesTo(
@@ -778,6 +778,51 @@ describe('Functional tests', () => {
             atom.project.setPaths([fixturePath()]);
             setPath('C:/');
             expect(currentPath()).toEqual('C:/');
+        });
+    });
+
+    describe('Fuzzy filename matching', () => {
+        beforeEach(resetConfig);
+        beforeEach(() => {
+            atom.config.set('advanced-open-file.fuzzyMatch', true);
+        });
+        beforeEach(openModal);
+
+        it('lists files and folders as normal when no fragment is being matched', () => {
+            setPath(fixturePath() + stdPath.sep);
+
+            expect(currentPathList()).toEqual([
+                '..',
+                'examples',
+                'prefix_match.js',
+                'prefix_other_match.js',
+                'sample.js'
+            ]);
+        });
+
+        it('uses a fuzzy algorithm for matching files instead of prefix matching', () => {
+            setPath(fixturePath('ix'));
+
+            expect(currentPathList()).toEqual([
+                'prefix_match.js',
+                'prefix_other_match.js',
+            ]);
+        });
+
+        it('sorts matches by weight instead of by name', () => {
+            setPath(fixturePath('examples', 'fuzzyWeight', 'heavy_'));
+
+            expect(currentPathList()).toEqual([
+                'more_heavy_heavy.js',
+                'less_heavy.js',
+            ]);
+        });
+
+        it('chooses the first match for autocomplete when nothing is highlighted', () => {
+            assertAutocompletesTo(
+                fixturePath('ix'),
+                fixturePath('prefix_match.js')
+            );
         });
     });
 });
