@@ -268,16 +268,24 @@ describe('Functional tests', () => {
             expect(atom.beep).toHaveBeenCalled();
         });
 
-        it('is case-sensitive during autocomplete', () => {
+        it(`is case-sensitive during autocomplete if the fragment has a capital
+            letter`, () => {
             setPath(fixturePath('examples', 'caseSensitive', 'prefix_m'));
             dispatch('advanced-open-file:autocomplete');
             expect(currentPath()).toEqual(
-                fixturePath('examples', 'caseSensitive', 'prefix_match_lower.js')
+                fixturePath('examples', 'caseSensitive', 'prefix_match_')
             );
 
             setPath(fixturePath('examples', 'caseSensitive', 'prefix_M'));
             dispatch('advanced-open-file:autocomplete');
             expect(currentPath()).toEqual(
+                fixturePath('examples', 'caseSensitive', 'prefix_Match_upper.js')
+            );
+        });
+
+        it('fixes the case of letters in the fragment if necessary', () => {
+            assertAutocompletesTo(
+                fixturePath('examples', 'caseSensitive', 'prefix_match_up'),
                 fixturePath('examples', 'caseSensitive', 'prefix_Match_upper.js')
             );
         });

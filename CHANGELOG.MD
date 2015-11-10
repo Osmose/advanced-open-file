@@ -2,6 +2,8 @@
 ================
 
 * #67: Absolutify relative paths before attempting to create them.
+* #66: Make autocomplete case-insensitive unless there is a capital letter in
+  the path fragment. This makes it consistent with how the file listing behaves.
 
 
 0.12.1 (November 9, 2015)
