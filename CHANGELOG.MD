@@ -1,5 +1,5 @@
-0.12.2 (Pending)
-================
+0.12.2 (November 9, 2015)
+=========================
 
 * #67: Absolutify relative paths before attempting to create them.
 * #66: Make autocomplete case-insensitive unless there is a capital letter in
