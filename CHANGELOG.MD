@@ -1,4 +1,4 @@
-0.12.4 (Pending)
+0.13.0 (Pending)
 ================
 
 * Ignore all errors when running stat on files and treat them as if they don't
@@ -6,6 +6,8 @@
 * Fix bug in path shortcuts where they were being applied even if a path
   separator wasn't before the shortcut itself.
 * #63: Implement event handler API as a versioned service for other packages.
+* #60: Treat "~/" at the start of a path as the user's home directory if fast
+  directory switching is turned off.
 
 
 0.12.3 (November 14, 2015)

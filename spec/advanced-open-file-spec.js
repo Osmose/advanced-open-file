@@ -217,6 +217,13 @@ describe('Functional tests', () => {
             let addProjectFolderButton = exampleListItem.find('.add-project-folder');
             expect(addProjectFolderButton.length).toEqual(0);
         });
+
+        it('expands tildes at the start to the user\'s home directory', () => {
+            spyOn(osenv, 'home').andReturn(fixturePath());
+            setPath(stdPath.join('~', 'examples', 'subdir') + stdPath.sep);
+
+            expect(currentPathList()).toEqual(['..', 'subsample.js']);
+        });
     });
 
     describe('Path input', () => {
@@ -502,6 +509,19 @@ describe('Functional tests', () => {
             runs(() => {
                 expect(currentEditorPaths()).toEqual([absolutePath]);
                 expect(fileExists(absolutePath)).toEqual(true);
+            });
+        });
+
+        it('can open files from tilde-prefixed paths', () => {
+            spyOn(osenv, 'home').andReturn(fixturePath());
+            setPath(stdPath.join('~', 'examples', 'subdir', 'subsample.js'));
+
+            dispatch('core:confirm');
+            waitsForOpenPaths(1);
+            runs(() => {
+                expect(currentEditorPaths()).toEqual([
+                    fixturePath('examples', 'subdir', 'subsample.js')
+                ]);
             });
         });
     });
