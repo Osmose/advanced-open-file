@@ -21,7 +21,6 @@
     "atom": ">=0.175.0"
   },
   "dependencies": {
-    "babel-polyfill": "^6.0.14",
     "event-kit": "^1.3.0",
     "mkdirp": "^0.5.1",
     "osenv": "^0.1.3",

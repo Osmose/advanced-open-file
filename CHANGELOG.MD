@@ -1,3 +1,10 @@
+0.12.1 (November 9, 2015)
+=========================
+
+* #68: Removed Babel polyfill because it breaks other packages due to it's
+  global polyfilling.
+
+
 0.12.0 (November 6, 2015)
 =========================
 
