@@ -1,3 +1,9 @@
+0.12.2 (Pending)
+================
+
+* #67: Absolutify relative paths before attempting to create them.
+
+
 0.12.1 (November 9, 2015)
 =========================
 

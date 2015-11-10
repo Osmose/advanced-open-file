@@ -467,6 +467,25 @@ describe('Functional tests', () => {
                 expect(fileExists(newDir)).toEqual(true);
             });
         });
+
+        it('can create files from relative paths', () => {
+            let tempDir = fs.realpathSync(temp.mkdirSync());
+            let path = stdPath.join('newDir', 'newFile.js');
+            let absolutePath = stdPath.join(tempDir, path);
+
+            atom.project.setPaths([tempDir]);
+            atom.config.set('advanced-open-file.createFileInstantly', true);
+
+            setPath(path);
+            expect(fileExists(absolutePath)).toEqual(false);
+
+            dispatch('core:confirm');
+            waitsForOpenPaths(1);
+            runs(() => {
+                expect(currentEditorPaths()).toEqual([absolutePath]);
+                expect(fileExists(absolutePath)).toEqual(true);
+            });
+        });
     });
 
     describe('Keyboard navigation', () => {
