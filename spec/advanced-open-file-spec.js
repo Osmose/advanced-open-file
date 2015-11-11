@@ -283,6 +283,16 @@ describe('Functional tests', () => {
             );
         });
 
+        it(`can autocomplete when the path listing contains two paths where
+            one path is the prefix of another`, () => {
+            // The example has `planning` and `planning_backend`. The bug arises
+            // because the entire `planning` path is a prefix of the other.
+            assertAutocompletesTo(
+                fixturePath('examples', 'matchPrefix', 'plan'),
+                fixturePath('examples', 'matchPrefix', 'planning')
+            );
+        });
+
         it('fixes the case of letters in the fragment if necessary', () => {
             assertAutocompletesTo(
                 fixturePath('examples', 'caseSensitive', 'prefix_match_up'),

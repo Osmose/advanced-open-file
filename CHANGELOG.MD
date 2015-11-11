@@ -1,3 +1,9 @@
+0.12.3 (Pending)
+================
+
+* #69: Fix bug with autocomplete where we calculated the wrong bounds while
+  finding the common prefix between two paths.
+
 0.12.2 (November 9, 2015)
 =========================
 
