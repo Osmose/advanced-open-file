@@ -1,5 +1,5 @@
-0.12.3 (Pending)
-================
+0.12.3 (November 14, 2015)
+==========================
 
 * #69: Fix bug with autocomplete where we calculated the wrong bounds while
   finding the common prefix between two paths.
