@@ -140,15 +140,41 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
   </dd>
 </dl>
 
-## Events
+## Event Service
 
 Other packages can subscribe to events to get notified when certain actions
-happen in advanced-open-file. To do so, you'll need to load the main module
-using `atom.package`:
+happen in advanced-open-file. To do so, you'll need to consume the
+`advanced-open-file-events` service:
+
+### `package.json`
+
+```json
+"consumedServices": {
+  "advanced-open-file-events": {
+    "versions": {
+      "0.1.0": "consumeEventService"
+    }
+  }
+}
+```
+
+### Main Module
 
 ```coffeescript
-modulePath = atom.packages.getLoadedPackage('advanced-open-file').mainModulePath
-advancedOpenFile = require(modulePath)
+{Disposable} = require 'atom'
+
+
+module.exports =
+  consumeEventService: (service) ->
+    openDisposable = service.onDidOpenPath (path) ->
+      console.log "Open: #{path}"
+
+    createDisposable = service.onDidCreatePath (path) ->
+      console.log "Create: #{path}"
+
+    return new Disposable ->
+      openDisposable.dispose()
+      createDisposable.dispose()
 ```
 
 ### `onDidOpenPath`
@@ -156,9 +182,8 @@ advancedOpenFile = require(modulePath)
 Triggered when a file is opened via advanced-open-file.
 
 ```coffeescript
-advancedOpenFile.onDidOpenPath((path) -> {
-  console.log(path)
-})
+service.onDidOpenPath (path) ->
+  console.log "Open: #{path}"
 ```
 
 ### `onDidCreatePath`
@@ -169,9 +194,8 @@ trigger when the preference is disabled and a new file is opened and then
 subsequently saved.
 
 ```coffeescript
-advancedOpenFile.onDidCreatePath((path) -> {
-  console.log(path)
-})
+service.onDidCreatePath (path) ->
+  console.log "Create: #{path}"
 ```
 
 ## Contributing

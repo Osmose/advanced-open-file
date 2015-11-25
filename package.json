@@ -8,6 +8,14 @@
       "advanced-open-file:toggle"
     ]
   },
+  "providedServices": {
+    "advanced-open-file-events": {
+      "description": "Listen to events triggered when users open or create paths using advanced-open-file.",
+      "versions": {
+        "0.1.0": "provideEventService"
+      }
+    }
+  },
   "keywords": [
     "atom",
     "open",

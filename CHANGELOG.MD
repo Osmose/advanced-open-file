@@ -5,6 +5,7 @@
   exist. Previously only ENOENT errors were ignored.
 * Fix bug in path shortcuts where they were being applied even if a path
   separator wasn't before the shortcut itself.
+* #63: Implement event handler API as a versioned service for other packages.
 
 
 0.12.3 (November 14, 2015)

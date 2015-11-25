@@ -6,7 +6,7 @@ import temp from 'temp'; temp.track();
 import $ from 'jquery';
 import osenv from 'osenv';
 
-import {onDidCreatePath, onDidOpenPath} from '../lib/advanced-open-file';
+import {provideEventService} from '../lib/advanced-open-file';
 import {
     DEFAULT_ACTIVE_FILE_DIR,
     DEFAULT_EMPTY,
@@ -615,7 +615,7 @@ describe('Functional tests', () => {
 
         it('allows subscription to events when paths are opened', () => {
             let handler = jasmine.createSpy('handler');
-            let sub = onDidOpenPath(handler);
+            let sub = provideEventService().onDidOpenPath(handler);
             let path = fixturePath('sample.js');
 
             setPath(path);
@@ -629,7 +629,7 @@ describe('Functional tests', () => {
             let tempDir = fs.realpathSync(temp.mkdirSync());
             let path = stdPath.join(tempDir, 'newfile.js');
             let handler = jasmine.createSpy('handler');
-            let sub = onDidCreatePath(handler);
+            let sub = provideEventService().onDidCreatePath(handler);
 
             setPath(path);
             dispatch('core:confirm');
