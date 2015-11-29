@@ -34,7 +34,8 @@ You can also use the `Up` and `Down` arrow keys to scroll through the list, and
 `Enter` to select the currently-highlighted item.
 
 If a directory has a plus symbol on the right side of its entry, clicking the
-symbol will add it as a project directory.
+symbol will add it as a project directory. You can also add a highlighted
+directory as a project directory using `Shift-Cmd-O`/`Ctrl-Alt-O`.
 
 `Cmd-Z`/`Ctrl-Z` will undo changes made to the current path, such as
 autocompletion or directory shortcuts.
@@ -61,6 +62,12 @@ Available commands for binding:
 
   <dt><code>core:cancel</code></dt>
   <dd>Close the Advanced Open File dialog.</dd>
+
+  <dt><code>application:add-project-folder</code></dt>
+  <dd>
+    If a folder path has been selected with the cursor, add it as a project
+    directory.
+  </dd>
 
   <dt><code>advanced-open-file:autocomplete</code></dt>
   <dd>Attempts to autocomplete the current input.</dd>

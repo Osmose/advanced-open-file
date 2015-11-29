@@ -610,6 +610,51 @@ describe('Functional tests', () => {
             expect(currentPath()).toEqual(fixturePath() + path.sep)
         });
 
+        it('can add folders as project directories using a keyboard command', () => {
+            atom.project.setPaths([]);
+            setPath(fixturePath() + path.sep);
+            moveDown(2); // examples folder
+            dispatch('application:add-project-folder');
+            expect(atom.project.getPaths()).toEqual([fixturePath('examples')]);
+        });
+
+        it('beeps when trying to add the parent folder as a project directory', () => {
+            spyOn(atom, 'beep');
+            atom.project.setPaths([]);
+
+            setPath(fixturePath() + path.sep);
+            moveDown(1); // Parent folder
+            dispatch('application:add-project-folder');
+
+            expect(atom.beep).toHaveBeenCalled();
+            expect(atom.project.getPaths()).toEqual([]);
+        });
+
+        it('beeps when trying to add a file as a project directory', () => {
+            spyOn(atom, 'beep');
+            atom.project.setPaths([]);
+
+            setPath(fixturePath() + path.sep);
+            moveDown(3); // prefix_match.js
+            dispatch('application:add-project-folder');
+
+            expect(atom.beep).toHaveBeenCalled();
+            expect(atom.project.getPaths()).toEqual([]);
+        });
+
+        it(`beeps when trying to add a folder as a project directory that is
+                already one`, () => {
+            spyOn(atom, 'beep');
+            atom.project.setPaths([fixturePath('examples')]);
+
+            setPath(fixturePath() + path.sep);
+            moveDown(2); // examples folder
+            dispatch('application:add-project-folder');
+
+            expect(atom.beep).toHaveBeenCalled();
+            expect(atom.project.getPaths()).toEqual([fixturePath('examples')]);
+        });
+
         it(`can select the first item in the list if none are selected using
             special command`, () => {
             setPath(fixturePath('prefix'));

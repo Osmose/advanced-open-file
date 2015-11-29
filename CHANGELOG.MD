@@ -9,6 +9,7 @@
 * #60: Treat "~/" at the start of a path as the user's home directory if fast
   directory switching is turned off.
 * #70: Add setting for enabling directory creation from the open dialog.
+* #61: Add keyboard shortcut for adding project directories.
 
 
 0.12.3 (November 14, 2015)
