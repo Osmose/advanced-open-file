@@ -731,7 +731,7 @@ describe('Functional tests', () => {
 
             setPath(path);
             dispatch('core:confirm');
-            expect(handler).toHaveBeenCalledWith(path);
+            expect(handler).toHaveBeenCalledWith(new Path(path).absolute);
             sub.dispose();
         });
     });
