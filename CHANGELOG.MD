@@ -10,6 +10,8 @@
   directory switching is turned off.
 * #70: Add setting for enabling directory creation from the open dialog.
 * #61: Add keyboard shortcut for adding project directories.
+* #72: Determine modal max height programmatically for themes that place modals
+  at odd positions.
 
 
 0.12.3 (November 14, 2015)
