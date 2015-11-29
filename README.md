@@ -104,6 +104,14 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
 ## Settings
 
 <dl>
+  <dt>Create directories</dt>
+  <dd>
+    Normally, when you attempt to open a path pointing to a directory that
+    doesn't exist, an error beep sounds and nothing happens. When this setting
+    is enabled, opening a non-existent directory will create it and show a
+    notification confirming the creation.
+  </dd>
+
   <dt>Create files instantly</dt>
   <dd>
     If checked, files are created immediately instead of on save if they don't

@@ -94,6 +94,14 @@ describe('Functional tests', () => {
         return true;
     }
 
+    function isDirectory(path) {
+        try {
+            return fs.statSync(path).isDirectory();
+        } catch (err) {}
+
+        return false;
+    }
+
     function clickFile(filename) {
         ui.find(`.list-item[data-file-name$='${filename}']`).click();
     }
@@ -451,6 +459,18 @@ describe('Functional tests', () => {
             expect(atom.beep).toHaveBeenCalled();
         });
 
+        it(`creates the directory when opening a path ending a separator if
+            configured`, () => {
+            let tempDir = fs.realpathSync(temp.mkdirSync());
+            let path = stdPath.join(tempDir, 'newdir') + stdPath.sep;
+            atom.config.set('advanced-open-file.createDirectories', true);
+            setPath(path);
+            expect(isDirectory(path)).toEqual(false);
+
+            dispatch('core:confirm');
+            expect(isDirectory(path)).toEqual(true);
+        });
+
         it('opens a new file without saving it if opening a non-existant path', () => {
             let path = fixturePath('does.not.exist');
             setPath(path);
@@ -648,6 +668,19 @@ describe('Functional tests', () => {
             atom.config.set('advanced-open-file.createFileInstantly', true);
             let tempDir = fs.realpathSync(temp.mkdirSync());
             let path = stdPath.join(tempDir, 'newfile.js');
+            let handler = jasmine.createSpy('handler');
+            let sub = provideEventService().onDidCreatePath(handler);
+
+            setPath(path);
+            dispatch('core:confirm');
+            expect(handler).toHaveBeenCalledWith(path);
+            sub.dispose();
+        });
+
+        it('emits the create event when creating a directory', () => {
+            atom.config.set('advanced-open-file.createDirectories', true);
+            let tempDir = fs.realpathSync(temp.mkdirSync());
+            let path = stdPath.join(tempDir, 'newdir') + stdPath.sep;
             let handler = jasmine.createSpy('handler');
             let sub = provideEventService().onDidCreatePath(handler);
 
