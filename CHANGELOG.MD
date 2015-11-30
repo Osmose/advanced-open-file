@@ -1,5 +1,5 @@
-0.13.0 (Pending)
-================
+0.13.0 (November 29, 2015)
+==========================
 
 * Ignore all errors when running stat on files and treat them as if they don't
   exist. Previously only ENOENT errors were ignored.
