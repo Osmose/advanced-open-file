@@ -26,7 +26,7 @@
   "repository": "https://github.com/Osmose/advanced-open-file",
   "license": "MIT",
   "engines": {
-    "atom": ">=0.175.0"
+    "atom": ">=1.0.4"
   },
   "dependencies": {
     "event-kit": "^1.3.0",
