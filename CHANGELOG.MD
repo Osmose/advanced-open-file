@@ -1,6 +1,8 @@
 0.13.1 (Pending)
 ================
 
+* #84: Cursor no longer resets to the end of the path when typing in the middle
+  of the path.
 * #81: Fix project root shortcut when path input is otherwise empty.
 * #80: Fall back to project root as initial path when the active editor doesn't
   have a path, such as the settings pane.

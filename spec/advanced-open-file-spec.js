@@ -363,6 +363,20 @@ describe('Functional tests', () => {
             setPath(':' + stdPath.sep);
             expect(currentPath()).toEqual(fixturePath('examples') + stdPath.sep);
         });
+
+        it('does not reset the cursor position while typing', () => {
+            setPath(fixturePath('subdir'));
+
+            // Set cursor to be between the d and i in subdir.
+            let end = pathEditor.getCursorBufferPosition();
+            pathEditor.setCursorBufferPosition([end.row, end.column - 2])
+
+            // Insert a new letter and check that the cursor is after it but
+            // not at the end of the editor completely.
+            pathEditor.insertText('a');
+            let newEnd = pathEditor.getCursorBufferPosition();
+            expect(newEnd.column).toEqual(end.column - 1);
+        });
     });
 
     describe('Path input default value', () => {
