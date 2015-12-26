@@ -25,6 +25,9 @@ describe('Functional tests', () => {
         workspaceElement = atom.views.getView(atom.workspace);
         jasmine.attachToDOM(workspaceElement);
 
+        // Clear out any leftover panes.
+        atom.workspace.getPanes().forEach((pane) => pane.destroy());
+
         activationPromise = atom.packages.activatePackage('advanced-open-file');
     });
 
@@ -568,6 +571,23 @@ describe('Functional tests', () => {
                 expect(currentEditorPaths()).toEqual([
                     fixturePath('examples', 'subdir', 'subsample.js')
                 ]);
+            });
+        });
+
+        it('can open files in new split panes', () => {
+            atom.workspace.open(fixturePath('sample.js'));
+            expect(atom.workspace.getPanes().length).toEqual(1);
+
+            setPath(fixturePath('prefix_match.js'));
+            dispatch('pane:split-left');
+
+            waitsForOpenPaths(2);
+            runs(() => {
+                expect(new Set(currentEditorPaths())).toEqual(new Set([
+                    fixturePath('sample.js'),
+                    fixturePath('prefix_match.js'),
+                ]));
+                expect(atom.workspace.getPanes().length).toEqual(2);
             });
         });
     });
