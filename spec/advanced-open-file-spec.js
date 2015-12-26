@@ -351,6 +351,11 @@ describe('Functional tests', () => {
             setPath(fixturePath('subdir') + stdPath.sep + stdPath.sep);
             expect(currentPath()).toEqual(fsRoot);
 
+            // When the rest of path is empty, some platforms (Windows mainly)
+            // can't infer a drive letter, so we can't use fsRoot from above.
+            // Instead, we'll use the root of the path we're testing.
+            fsRoot = new Path(stdPath.sep + stdPath.sep).root().full;
+
             // Also test when the rest of the path is empty.
             setPath(stdPath.sep + stdPath.sep);
             expect(currentPath()).toEqual(fsRoot);
