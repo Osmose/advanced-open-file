@@ -1,6 +1,7 @@
 0.13.1 (Pending)
 ================
 
+* #81: Fix project root shortcut when path input is otherwise empty.
 * #80: Fall back to project root as initial path when the active editor doesn't
   have a path, such as the settings pane.
 * #79: Fix gap below cursor in the textbox and cut-off shadows on the sides.

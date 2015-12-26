@@ -334,6 +334,10 @@ describe('Functional tests', () => {
             atom.config.set('advanced-open-file.helmDirSwitch', true);
             setPath(fixturePath('subdir') + stdPath.sep + '~' + stdPath.sep);
             expect(currentPath()).toEqual(osenv.home() + stdPath.sep);
+
+            // Also test when the rest of the path is empty.
+            setPath('~' + stdPath.sep);
+            expect(currentPath()).toEqual(osenv.home() + stdPath.sep);
         });
 
         it('can switch to the filesystem root using a shortcut', () => {
@@ -343,12 +347,20 @@ describe('Functional tests', () => {
             atom.config.set('advanced-open-file.helmDirSwitch', true);
             setPath(fixturePath('subdir') + stdPath.sep + stdPath.sep);
             expect(currentPath()).toEqual(fsRoot);
+
+            // Also test when the rest of the path is empty.
+            setPath(stdPath.sep + stdPath.sep);
+            expect(currentPath()).toEqual(fsRoot);
         });
 
         it('can switch to the project root directory using a shortcut', () => {
             atom.config.set('advanced-open-file.helmDirSwitch', true);
             atom.project.setPaths([fixturePath('examples')]);
             setPath(fixturePath('subdir') + stdPath.sep + ':' + stdPath.sep);
+            expect(currentPath()).toEqual(fixturePath('examples') + stdPath.sep);
+
+            // Also test when the rest of the path is empty.
+            setPath(':' + stdPath.sep);
             expect(currentPath()).toEqual(fixturePath('examples') + stdPath.sep);
         });
     });
