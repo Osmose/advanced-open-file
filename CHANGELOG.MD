@@ -1,5 +1,5 @@
-0.13.1 (Pending)
-================
+0.14.0 (December 26, 2015)
+==========================
 
 * #82: Add shortcuts for opening files in new split panes.
 * #57: Add setting for fuzzy filename matching.
