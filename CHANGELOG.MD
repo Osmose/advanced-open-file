@@ -1,3 +1,9 @@
+0.13.1 (Pending)
+================
+
+* #79: Fix gap below cursor in the textbox and cut-off shadows on the sides.
+
+
 0.13.0 (November 29, 2015)
 ==========================
 
