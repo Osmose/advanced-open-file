@@ -1,3 +1,10 @@
+0.14.1 (December 29, 2015)
+==========================
+
+* Fix issue where opening a path immediately after autocompleting it opened the
+  pre-autocomplete path instead of the full path.
+
+
 0.14.0 (December 26, 2015)
 ==========================
 
