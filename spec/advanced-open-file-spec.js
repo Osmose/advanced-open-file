@@ -4,7 +4,9 @@ import stdPath from 'path';
 import temp from 'temp'; temp.track();
 
 import $ from 'jquery';
+import mkdirp from 'mkdirp';
 import osenv from 'osenv';
+import touch from 'touch';
 
 import {provideEventService} from '../lib/advanced-open-file';
 import {
@@ -594,6 +596,31 @@ describe('Functional tests', () => {
                 ]));
                 expect(atom.workspace.getPanes().length).toEqual(2);
             });
+        });
+
+        it(`shows an error notification when creating a subdirectory throws an
+            error`, () => {
+            debugger;
+            spyOn(atom.notifications, 'addError');
+            spyOn(mkdirp, 'sync').andCallFake(() => {
+                throw new Error('OH NO');
+            });
+            setPath(fixturePath('examples', 'noPermission', 'subdir', 'file.txt'));
+            dispatch('core:confirm');
+            expect(atom.notifications.addError).toHaveBeenCalled();
+        });
+
+        it(`shows an error notification when creating a file in a directory
+            throws an error`, () => {
+            spyOn(atom.notifications, 'addError');
+            spyOn(touch, 'sync').andCallFake(() => {
+                throw new Error('OH NO');
+            });
+            atom.config.set('advanced-open-file.createFileInstantly', true);
+
+            setPath(fixturePath('examples', 'noPermission', 'file.txt'));
+            dispatch('core:confirm');
+            expect(atom.notifications.addError).toHaveBeenCalled();
         });
     });
 
