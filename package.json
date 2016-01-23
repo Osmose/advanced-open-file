@@ -3,6 +3,9 @@
   "version": "0.14.1",
   "main": "./lib/advanced-open-file",
   "description": "Open and create files and directories easily. Type in a path (with autocomplete) and view directory contents.",
+  "scripts": {
+    "shell": "babel-node -r 0"
+  },
   "activationCommands": {
     "atom-workspace": [
       "advanced-open-file:toggle"
@@ -36,7 +39,8 @@
     "touch": "^1.0.0"
   },
   "devDependencies": {
-    "temp": "^0.8.3",
-    "jquery": "^2.1.4"
+    "babel": "^5.8.35",
+    "jquery": "^2.1.4",
+    "temp": "^0.8.3"
   }
 }
