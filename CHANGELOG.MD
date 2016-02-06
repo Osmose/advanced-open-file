@@ -1,5 +1,5 @@
-0.14.2 (Pending)
-================
+0.14.2 (February 6, 2016)
+=========================
 * #89: Add error handling when creating files or directories fails.
 
 0.14.1 (December 29, 2015)
