@@ -225,6 +225,15 @@ describe('Functional tests', () => {
 
             addProjectFolderButton.click();
             expect(atom.project.getPaths()).toEqual([fixturePath('examples')]);
+
+            // Do not open folder when clicking.
+            expect(currentPath()).toEqual(fixturePath() + path.sep);
+
+            // Remove button when clicked.
+            addProjectFolderButton = ui.find(
+                '.list-item[data-file-name$=\'examples\'] .add-project-folder'
+            );
+            expect(addProjectFolderButton.length).toEqual(0);
         });
 
         it(`does not show the add-project-folder button for folders that are
