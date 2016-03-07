@@ -1,6 +1,12 @@
+0.14.3 (March 6, 2016)
+======================
+* #93: Do not close dialog when adding project folders.
+
+
 0.14.2 (February 6, 2016)
 =========================
 * #89: Add error handling when creating files or directories fails.
+
 
 0.14.1 (December 29, 2015)
 ==========================
