@@ -32,10 +32,12 @@
     "atom": ">=1.0.8"
   },
   "dependencies": {
+    "classnames": "^2.2.3",
     "event-kit": "^1.3.0",
     "fuzzaldrin-plus": "^0.3.1",
     "mkdirp": "^0.5.1",
     "osenv": "^0.1.3",
+    "react-for-atom": "^0.14.6",
     "touch": "^1.0.0"
   },
   "devDependencies": {
