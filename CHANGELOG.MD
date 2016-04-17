@@ -1,3 +1,10 @@
+0.15.0 (April 17, 2016)
+=======================
+* #86: Improve performance when listing large directories by caching file reads
+  and only rendering visible DOM nodes in the directory listing. This involved
+  a rewrite of the view layer using React.
+
+
 0.14.3 (March 6, 2016)
 ======================
 * #93: Do not close dialog when adding project folders.
