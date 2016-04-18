@@ -1,3 +1,9 @@
+0.16.0 (April 18, 2016)
+=======================
+* #103, #104: Revert 0.15.0 due to conflicts with other packages using
+  react-for-atom.
+
+
 0.15.0 (April 17, 2016)
 =======================
 * #86: Improve performance when listing large directories by caching file reads
