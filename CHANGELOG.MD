@@ -1,3 +1,10 @@
+0.16.1 (April 18, 2016)
+=======================
+* #103, #104: Re-add React rewrite and replace react-for-atom with React
+  directly. It seems that React might be able to coexist with other instances
+  of React as long as the components don't mix between them.
+
+
 0.16.0 (April 18, 2016)
 =======================
 * #103, #104: Revert 0.15.0 due to conflicts with other packages using
