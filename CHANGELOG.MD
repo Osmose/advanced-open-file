@@ -1,3 +1,9 @@
+0.16.2 (April 22, 2016)
+=======================
+* #105: Do not modify cached path lists when fuzzy matching is enabled (thanks
+  itiut!).
+
+
 0.16.1 (April 18, 2016)
 =======================
 * #103, #104: Re-add React rewrite and replace react-for-atom with React
