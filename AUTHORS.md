@@ -13,3 +13,4 @@
 - [JesseLeite](https://github.com/JesseLeite)
 - [artagnon](https://github.com/artagnon)
 - [itiut](https://github.com/itiut)
+- [jhslinkman](https://github.com/jhslinkman)
