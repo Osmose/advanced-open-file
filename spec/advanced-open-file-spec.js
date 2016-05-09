@@ -669,6 +669,15 @@ describe('Functional tests', () => {
             });
         });
 
+        it('highlights the currently-selected path', () => {
+            setPath(fixturePath() + stdPath.sep);
+            moveDown(2);
+
+            let selected = ui.find('.list-item.selected');
+            expect(selected.length).toEqual(1);
+            expect(selected.text()).toEqual('examples');
+        });
+
         it('wraps the cursor at the edges', () => {
             setPath(fixturePath() + stdPath.sep);
             moveUp(2);
