@@ -670,6 +670,31 @@ describe('Functional tests', () => {
             });
         });
 
+        it('allows moving a cursor to the top and confirming to select a path', () => {
+            setPath(fixturePath() + stdPath.sep);
+            moveDown(3);
+            dispatch('advanced-open-file:move-cursor-top');
+            moveDown(2);
+            dispatch('core:confirm');
+
+            waitsForOpenPaths(1);
+            runs(() => {
+                expect(currentEditorPaths()).toEqual([fixturePath('prefix_match.js')]);
+            });
+        });
+
+        it('allows moving a cursor to the bottom and confirming to select a path', () => {
+            setPath(fixturePath() + stdPath.sep);
+            moveDown(2);
+            dispatch('advanced-open-file:move-cursor-bottom');
+            dispatch('core:confirm');
+
+            waitsForOpenPaths(1);
+            runs(() => {
+                expect(currentEditorPaths()).toEqual([fixturePath('sample.js')]);
+            });
+        });
+
         it('wraps the cursor at the edges', () => {
             setPath(fixturePath() + stdPath.sep);
             moveUp(2);
