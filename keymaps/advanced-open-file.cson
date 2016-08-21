@@ -17,6 +17,8 @@
   'tab': 'advanced-open-file:autocomplete'
   'up': 'advanced-open-file:move-cursor-up'
   'down': 'advanced-open-file:move-cursor-down'
+  'pageup': 'advanced-open-file:move-cursor-top'
+  'pagedown': 'advanced-open-file:move-cursor-bottom'
 
   # Emacs-style movement
   'ctrl-p': 'advanced-open-file:move-cursor-up'
