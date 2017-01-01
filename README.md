@@ -30,8 +30,9 @@ don't exist will be created immediately upon hitting `Enter`.
 
 You can also click on any entry in the file list to add it to the current path
 (in the case of a directory) or to open it immediately (in the case of a file).
-You can also use the `Up` and `Down` arrow keys to scroll through the list, and
-`Enter` to select the currently-highlighted item.
+You can also use the `Up` and `Down` arrow keys to scroll through the list,
+`Page Up` and `Page Down` to move to the top and bottom of the list, and `Enter`
+to select the currently-highlighted item.
 
 If a directory has a plus symbol on the right side of its entry, clicking the
 symbol will add it as a project directory. You can also add a highlighted
@@ -92,6 +93,18 @@ Available commands for binding:
 
   <dt><code>advanced-open-file:move-cursor-down</code></dt>
   <dd>Move the cursor/highlight for the currently selected file down.</dd>
+
+  <dt><code>advanced-open-file:move-cursor-top</code></dt>
+  <dd>
+    Move the cursor/highlight for the currently selected file to the top of the
+    list.
+  </dd>
+
+  <dt><code>advanced-open-file:move-cursor-bottom</code></dt>
+  <dd>
+    Move the cursor/highlight for the currently selected file to the bottom of
+    the list.
+  </dd>
 
   <dt><code>advanced-open-file:delete-path-component</code></dt>
   <dd>

@@ -1,3 +1,14 @@
+0.16.4 (August 21, 2016)
+=======================
+* #120: Add ability to scroll to the top and bottom of the file listing using
+  the `Page Up` and `Page Down` keys (thanks AlexWayfer!).
+
+
+0.16.3 (May 21, 2016)
+=======================
+* Revert to pre-React version again due to more reported issues with it.
+
+
 0.16.2 (April 22, 2016)
 =======================
 * #105: Do not modify cached path lists when fuzzy matching is enabled (thanks
