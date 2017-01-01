@@ -11,6 +11,13 @@
       "advanced-open-file:toggle"
     ]
   },
+  "consumedServices": {
+    "file-icons.element-icons": {
+      "versions": {
+        "1.0.0": "consumeElementIcons"
+      }
+    }
+  },
   "providedServices": {
     "advanced-open-file-events": {
       "description": "Listen to events triggered when users open or create paths using advanced-open-file.",
