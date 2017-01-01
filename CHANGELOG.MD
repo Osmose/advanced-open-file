@@ -1,3 +1,9 @@
+0.16.5 (January 1st, 2017)
+==========================
+* #133: Fix compatibility with the file-icons package (thanks jacobmischka and
+  Alhadis!).
+
+
 0.16.4 (August 21, 2016)
 =======================
 * #120: Add ability to scroll to the top and bottom of the file listing using
