@@ -185,6 +185,10 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
         Adding a colon and a slash (e.g. <code>:/</code>) will switch to the
         current project's root directory.
       </li>
+      <li>
+        Adding a dot and a slash (e.g. <code>./</code>) will switch to the
+        current files's directory.
+      </li>
     </ul>
   </dd>
 </dl>
