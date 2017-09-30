@@ -78,8 +78,8 @@ Available commands for binding:
 
   <dt><code>application:add-project-folder</code></dt>
   <dd>
-    If a folder path has been selected with the cursor, add it as a project
-    directory.
+    If either a folder path has been selected with the cursor, or the current
+    path is a folder, add that path as a project directory.
   </dd>
 
   <dt><code>advanced-open-file:autocomplete</code></dt>

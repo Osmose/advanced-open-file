@@ -592,7 +592,7 @@ describe('Functional tests', () => {
 
         it('can open files in new split panes', () => {
             atom.workspace.open(fixturePath('sample.js'));
-            expect(atom.workspace.getPanes().length).toEqual(1);
+            const initialPaneCount = atom.workspace.getPanes().length;
 
             setPath(fixturePath('prefix_match.js'));
             dispatch('pane:split-left');
@@ -603,7 +603,7 @@ describe('Functional tests', () => {
                     fixturePath('sample.js'),
                     fixturePath('prefix_match.js'),
                 ]));
-                expect(atom.workspace.getPanes().length).toEqual(2);
+                expect(atom.workspace.getPanes().length).toEqual(initialPaneCount + 1);
             });
         });
 
@@ -728,6 +728,13 @@ describe('Functional tests', () => {
             moveDown(2); // examples folder
             dispatch('application:add-project-folder');
             expect(atom.project.getPaths()).toEqual([fixturePath('examples')]);
+        });
+
+        it('will attempt to add the current path if no path if no path is selected', () => {
+            atom.project.setPaths([]);
+            setPath(fixturePath() + stdPath.sep);
+            dispatch('application:add-project-folder');
+            expect(atom.project.getPaths()).toEqual([fixturePath()]);
         });
 
         it('beeps when trying to add the parent folder as a project directory', () => {

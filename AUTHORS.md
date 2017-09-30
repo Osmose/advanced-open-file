@@ -17,3 +17,4 @@
 - [AlexWayfer](https://github.com/AlexWayfer)
 - [jacobmischka](https://github.com/jacobmischka)
 - [lee-dohm](https://github.com/lee-dohm)
+- [toumorokoshi](https://github.com/toumorokoshi)
