@@ -1,6 +1,6 @@
 {
   "name": "advanced-open-file",
-  "version": "0.16.6",
+  "version": "0.16.7",
   "main": "./lib/advanced-open-file",
   "description": "Open and create files and directories easily. Type in a path (with autocomplete) and view directory contents.",
   "scripts": {
