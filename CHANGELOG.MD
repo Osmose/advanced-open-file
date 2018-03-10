@@ -1,3 +1,8 @@
+0.16.8 (March 10th, 2018)
+=========================
+* #150: Add ignoredPatterns config for ignoring certain types of files in the
+  listing (thanks econtal!).
+
 0.16.7 (October 4th, 2017)
 =========================
 * #149: Use current path for add-project-folder if no path is selected (thanks
