@@ -187,6 +187,12 @@ following to your keymap to map `Ctrl-x Ctrl-f` to toggle the dialog and
       </li>
     </ul>
   </dd>
+
+  <dt>Ignore patterns</dt>
+  <dd>
+    A list of glob patterns. Any files that match the patterns will be hidden
+    from the file listing.
+  </dd>
 </dl>
 
 ## Event Service

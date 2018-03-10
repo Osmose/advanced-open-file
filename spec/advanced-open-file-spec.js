@@ -252,6 +252,17 @@ describe('Functional tests', () => {
 
             expect(currentPathList()).toEqual(['..', 'subsample.js']);
         });
+
+        it('does not list files if they match the ignoredPatterns config', () => {
+            atom.config.set('advanced-open-file.ignoredPatterns', ['prefix_*']);
+            setPath(fixturePath() + stdPath.sep);
+
+            expect(currentPathList()).toEqual([
+                '..',
+                'examples',
+                'sample.js'
+            ]);
+        });
     });
 
     describe('Path input', () => {
