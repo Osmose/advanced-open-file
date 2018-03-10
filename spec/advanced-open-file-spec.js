@@ -870,7 +870,7 @@ describe('Functional tests', () => {
     let windowsDescribe = process.env.AOF_WINDOWS_TESTS ? describe : xdescribe;
     windowsDescribe('Windows-specific tests', () => {
         // Just as a note, we're assuming C:\ exists and is the root
-        // system drive. It is on AppVeyor, and that's good enough.
+        // system drive.
 
         it('can read the root directory without failing', () => {
             // This potentially fails because we stat in-use files like
