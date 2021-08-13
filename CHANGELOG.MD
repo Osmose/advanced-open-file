@@ -1,3 +1,8 @@
+0.16.9 (August 13th, 2021)
+=========================
+* #150: Add ignoredPatterns config for ignoring certain types of files in the
+  listing (thanks econtal!).
+
 0.16.8 (March 10th, 2018)
 =========================
 * #150: Add ignoredPatterns config for ignoring certain types of files in the
